@@ -8,6 +8,7 @@
         </h2>
 
         <sui-form v-on:submit.prevent="saveForm()">
+          <Message :header="message" :errors="errors" v-if="errors.length" />
           <sui-segment stacked>
             <sui-form-field>
               <sui-input
@@ -36,22 +37,43 @@
 </template>
 
 <script>
+
+import Message from '../components/Message'
+
 export default {
   data: () => ({
     errors: [],
+    message: '',
     email: '',
     password: ''
   }),
+  components:{
+    Message
+  },
   methods:{
-    saveForm(){
+    saveForm(e){
       const app = this
       axios.post('login',{email:app.email,password:app.password})
       .then((resp) => {
         app.$router.replace('/')
       })
       .catch((err) => {
-        console.log(err)
+        const app = this
+        const errors = err.response.data
+        app.setError(errors)
       })
+      e.preventDefault()
+    },
+    setError(errors){
+      const app = this
+      if(Object.keys(errors).length) {
+        let data = []
+        app.message = errors.message
+        Object.keys(errors.errors).forEach((error) => {
+           data.push(errors.errors[error][0])
+        })
+        app.errors = data
+      }
     }
   }
 }
