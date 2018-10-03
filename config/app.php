@@ -159,6 +159,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class,
+        Laravolt\Indonesia\ServiceProvider::class,
+		Laratrust\LaratrustServiceProvider::class,
+ 
+
 
     ],
 
@@ -208,6 +213,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Indonesia' => Laravolt\Indonesia\Facade::class,
+		'Laratrust'   => Laratrust\LaratrustFacade::class,
+
+
 
     ],
 

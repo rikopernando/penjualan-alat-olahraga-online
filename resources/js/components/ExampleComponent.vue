@@ -8,6 +8,7 @@
                     <div class="card-body">
                         I'm an example component.
                     </div>
+                    <span><sui-button primary>click me</sui-button></span>
                 </div>
             </div>
         </div>
