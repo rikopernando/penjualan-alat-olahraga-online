@@ -1,5 +1,6 @@
-import Index from '../pages/index.vue'
-import Login from '../pages/login.vue'
+import Index from '../pages/index'
+import Login from '../pages/login'
+import Register from '../pages/register'
 
 const routes = [
       {
@@ -11,6 +12,11 @@ const routes = [
         path: '/login',
         name: 'login',
         component: Login
+      },
+      {
+        path: '/register',
+        name: 'register',
+        component: Register
       }
     ]
 

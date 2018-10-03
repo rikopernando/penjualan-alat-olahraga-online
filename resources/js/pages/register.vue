@@ -4,7 +4,7 @@
       <sui-grid-column>
 
         <h2 is="sui-header" color="teal" image>
-          <sui-header-content>Log-in to your account</sui-header-content>
+          <sui-header-content>Register</sui-header-content>
         </h2>
 
         <sui-form v-on:submit.prevent="saveForm()">
@@ -12,7 +12,15 @@
           <sui-segment stacked>
             <sui-form-field>
               <sui-input
-              v-model="email"
+              v-model="register.name"
+              type="text"
+              placeholder="Name"
+              icon="user"
+              icon-position="left" />
+            </sui-form-field>
+            <sui-form-field>
+              <sui-input
+              v-model="register.email"
               type="email"
               placeholder="E-mail address"
               icon="user"
@@ -20,17 +28,25 @@
             </sui-form-field>
             <sui-form-field>
               <sui-input
-              v-model="password"
+              v-model="register.password"
               type="password"
               placeholder="Password"
               icon="lock"
               icon-position="left" />
             </sui-form-field>
-            <sui-button size="large" color="teal" fluid>Login</sui-button>
+            <sui-form-field>
+              <sui-input
+              v-model="register.password_confirmation"
+              type="password"
+              placeholder="Password Confirmation"
+              icon="lock"
+              icon-position="left" />
+            </sui-form-field>
+            <sui-button size="large" color="teal" fluid>Register</sui-button>
           </sui-segment>
         </sui-form>
 
-        <sui-message>Belum punya akun? <router-link :to="{name: 'register'}">Register</router-link></sui-message>
+        <sui-message>Sudah punya akun? <router-link :to="{name: 'login'}">Login</router-link></sui-message>
       </sui-grid-column>
     </sui-grid>
   </div>
@@ -44,8 +60,12 @@ export default {
   data: () => ({
     errors: [],
     message: '',
-    email: '',
-    password: ''
+    register: {
+        email: '',
+        password: '',
+        name: '',
+        password_confirmation: ''
+    }
   }),
   components:{
     Message
@@ -53,7 +73,7 @@ export default {
   methods:{
     saveForm(e){
       const app = this
-      axios.post('login',{email:app.email,password:app.password})
+      axios.post('register',app.register)
       .then((resp) => {
         app.$router.replace('/')
       })
