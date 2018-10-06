@@ -2,35 +2,51 @@
   <div>
     <sui-menu fixed inverted>
       <sui-container>
-        <a href="#" is="sui-menu-item" class="header">
-          Project Name
-        </a>
+            <a href="#" is="sui-menu-item" class="header">
+              Project Name
+            </a>
 
-        <a is="sui-menu-item" href="#">Home</a>
+            <router-link :to="{name: 'index'}"
+              class="item" 
+              v-if="this.$store.state.user.loggedIn">
+               Home
+            </router-link>
+            <router-link :to="{name: 'dashboard'}"
+              class="item" 
+              v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
+               Dashboard
+            </router-link>
 
-        <sui-dropdown text="Dropdown" item class="simple">
-          <sui-dropdown-menu>
-            <a is="sui-dropdown-item" href="#">Link Item</a>
-            <a is="sui-dropdown-item" href="#">Link Item</a>
-
-            <sui-dropdown-divider />
-            <sui-dropdown-header>Header Item</sui-dropdown-header>
-
-            <sui-dropdown-item>
-              <sui-icon name="dropdown" /> Submenu
-
-              <sui-dropdown-menu class="simple">
-                <a is="sui-dropdown-item" href="#">Link Item</a>
-                <a is="sui-dropdown-item" href="#">Link Item</a>
-              </sui-dropdown-menu>
-            </sui-dropdown-item>
-
-            <a is="sui-dropdown-item" href="#">Link Item</a>
-          </sui-dropdown-menu>
-        </sui-dropdown>
+            <sui-dropdown 
+              text="Master Data"
+              item class="simple"
+              v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
+                  <sui-dropdown-menu>
+                    <router-link :to="{name: 'user'}" class="item"> 
+                       User
+                    </router-link>
+                  </sui-dropdown-menu>
+            </sui-dropdown>
       	<sui-menu-menu position="right">
-          <router-link :to="{name: 'login'}" class="item">Login</router-link>
-          <router-link :to="{name: 'register'}" class="item">Register</router-link>
+
+              <router-link :to="{name: 'login'}" 
+                class="item"
+                v-if="!this.$store.state.user.loggedIn">
+                  Login
+              </router-link>
+
+              <router-link :to="{name: 'register'}"
+                class="item"
+                v-if="!this.$store.state.user.loggedIn">
+                  Register
+              </router-link>
+
+              <router-link :to="{name: 'logout'}"
+                class="item"
+                v-if="this.$store.state.user.loggedIn">
+                  Logout
+              </router-link>
+
       	</sui-menu-menu>
       </sui-container>
     </sui-menu>
@@ -39,6 +55,9 @@
 
 <script>
 export default {
+  mounted(){
+    console.log(this.$store.state.user,$('meta[name="csrf-token"]').attr('content'))
+  }
 };
 </script>
 

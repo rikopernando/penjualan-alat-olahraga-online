@@ -35,6 +35,7 @@ class UsersSeeder extends Seeder
        $owner->name = "Owner";
        $owner->email = "owner@gmail.com";
        $owner->password = bcrypt('rahasia');
+       $owner->api_token = str_random(100);
        $owner->save();
        $owner->attachRole($role_owner);
 
@@ -43,6 +44,7 @@ class UsersSeeder extends Seeder
        $admin->name = "Admin";
        $admin->email = "admin@gmail.com";
        $admin->password = bcrypt('rahasia');
+       $admin->api_token = str_random(100);
        $admin->save();
        $admin->attachRole($role_admin);
 
@@ -51,6 +53,7 @@ class UsersSeeder extends Seeder
        $member->name = "Member";
        $member->email = "member@gmail.com";
        $member->password = bcrypt('rahasia');
+       $member->api_token = str_random(100);
        $member->save();
        $member->attachRole($role_member);
     }

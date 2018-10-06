@@ -27,6 +27,7 @@ const mutations = {
       state.is_admin = false
       state.is_owner= false
       state.loggedIn = false
+      state.profile = {}
     }
 }
 
