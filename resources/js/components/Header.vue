@@ -30,7 +30,7 @@
         </sui-dropdown>
       	<sui-menu-menu position="right">
           <router-link :to="{name: 'login'}" class="item">Login</router-link>
-        	<a is="sui-menu-item" href="#">Register</a>
+          <router-link :to="{name: 'register'}" class="item">Register</router-link>
       	</sui-menu-menu>
       </sui-container>
     </sui-menu>

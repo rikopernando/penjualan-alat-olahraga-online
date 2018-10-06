@@ -36,7 +36,7 @@ class UsersSeeder extends Seeder
        $owner->email = "owner@gmail.com";
        $owner->password = bcrypt('rahasia');
        $owner->save();
-       $owner->attachRole($role_admin);
+       $owner->attachRole($role_owner);
 
       // Create User
        $admin = new User(); 

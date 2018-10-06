@@ -75,9 +75,11 @@ export default {
       const app = this
       axios.post('register',app.register)
       .then((resp) => {
+        app.$store.commit('user/LOGIN',resp.data)
         app.$router.replace('/')
       })
       .catch((err) => {
+        console.log(err)
         const app = this
         const errors = err.response.data
         app.setError(errors)

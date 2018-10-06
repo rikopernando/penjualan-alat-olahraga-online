@@ -55,12 +55,14 @@ export default {
       const app = this
       axios.post('login',{email:app.email,password:app.password})
       .then((resp) => {
+        app.$store.commit('user/LOGIN',resp.data)
         app.$router.replace('/')
       })
       .catch((err) => {
+        console.log(err)
         const app = this
         const errors = err.response.data
-        app.setError(errors)
+        app.setError(err)
       })
     },
     setError(errors){
