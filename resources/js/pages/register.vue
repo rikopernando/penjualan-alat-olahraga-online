@@ -42,7 +42,8 @@
               icon="lock"
               icon-position="left" />
             </sui-form-field>
-            <sui-button size="large" color="teal" fluid>Register</sui-button>
+            <Loading v-if="loading" />
+            <sui-button size="large" color="teal" fluid v-else>Register</sui-button>
           </sui-segment>
         </sui-form>
 
@@ -55,9 +56,11 @@
 <script>
 
 import Message from '../components/Message'
+import Loading from '../components/Loading'
 
 export default {
   data: () => ({
+    loading: false,
     errors: [],
     message: '',
     register: {
@@ -68,13 +71,15 @@ export default {
     }
   }),
   components:{
-    Message
+    Message, Loading
   },
   methods:{
     saveForm(e){
       const app = this
+      app.loading = true
       axios.post('register',app.register)
       .then((resp) => {
+        app.loading = false
         app.$store.commit('user/LOGIN',resp.data)
         app.$router.replace('/')
       })
@@ -82,6 +87,7 @@ export default {
         console.log(err)
         const app = this
         const errors = err.response.data
+        app.loading = false
         app.setError(errors)
       })
     },

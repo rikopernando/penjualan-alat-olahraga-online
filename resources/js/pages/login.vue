@@ -26,7 +26,8 @@
               icon="lock"
               icon-position="left" />
             </sui-form-field>
-            <sui-button size="large" color="teal" fluid>Login</sui-button>
+             <Loading v-if="loading" />
+           	 <sui-button size="large" color="teal" fluid v-else>Login</sui-button>
           </sui-segment>
         </sui-form>
 
@@ -39,22 +40,27 @@
 <script>
 
 import Message from '../components/Message'
+import Loading from '../components/Loading'
 
 export default {
   data: () => ({
+    loading: false,
     errors: [],
     message: '',
     email: '',
     password: ''
   }),
   components:{
-    Message
+    Message, Loading
   },
   methods:{
     saveForm(e){
       const app = this
+      app.loading = true
       axios.post('login',{email:app.email,password:app.password})
       .then((resp) => {
+        localStorage.setItem('api_token',resp.data.api_token)
+        app.loading = false
         app.$store.commit('user/LOGIN',resp.data)
         app.$router.replace('/')
       })
@@ -62,7 +68,8 @@ export default {
         console.log(err)
         const app = this
         const errors = err.response.data
-        app.setError(err)
+        app.loading = false
+        app.setError(errors)
       })
     },
     setError(errors){

@@ -53,14 +53,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  mounted(){
-    console.log(this.$store.state.user,$('meta[name="csrf-token"]').attr('content'))
-  }
-};
-</script>
-
 <style lang="css" scoped>
 img.logo {
   margin-right: 1.5em !important;
