@@ -16,7 +16,20 @@ class UsersController extends Controller
      */
     public function index()
     {
-        return User::with('role')->paginate(10);
+        $users = User::with('role')->orderBy('id','desc')->paginate(10);
+        $data = [];
+
+        foreach($users as $user){
+            $role = Role::find($user->role->role_id);
+            $data[] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'otoritas' => $role->display_name,
+                ];
+        }
+
+        return app(PaginateController::class)->getPagination($users, $data, '/api/users');
     }
 
     /**

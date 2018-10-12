@@ -3,38 +3,34 @@
       <Header />
         <div class="container" style="margin-top: 70px;">
 			    <Breadcrumb active="user" :breadcrumb="breadcrumb" />
-          <sui-table striped>
-            <sui-table-header>
-              <sui-table-row>
-                <sui-table-header-cell>Name</sui-table-header-cell>
-                <sui-table-header-cell>Date Joined</sui-table-header-cell>
-                <sui-table-header-cell>E-mail</sui-table-header-cell>
-                <sui-table-header-cell>Called</sui-table-header-cell>
-              </sui-table-row>
-            </sui-table-header>
-            <sui-table-body>
-              <sui-table-row>
-                <sui-table-cell>John Lilki</sui-table-cell>
-                <sui-table-cell>September 14, 2013</sui-table-cell>
-                <sui-table-cell>jhlilk22@yahoo.com</sui-table-cell>
-                <sui-table-cell>No</sui-table-cell>
-              </sui-table-row>
-            </sui-table-body>
+          <Loading v-if="loading"/>
+          <sui-table striped v-else>
+            <TableHeader :header="tableHeader" />
+            <TableBody :data="users.data" v-if="Object.keys(users).length"/>
+            <TableKosong colspan="4" text="Data User Kosong" v-else/>
           </sui-table>
       </div>
     </div>
 </template>
 
 <script>
+
     import Header from '../../components/Header'
     import Breadcrumb from '../../components/Breadcrumb'
+    import TableHeader from '../../components/TableHeader'
+    import TableBody from '../../components/TableBody'
+    import TableKosong from '../../components/TableKosong'
+    import Loading from '../../components/Loading'
 
     export default {
         data: () => ({
-          breadcrumb: [{value: 'dashboard',label:'Dashboard'}, {value: 'user',label:'Users'}]
+          breadcrumb: [{value: 'dashboard',label:'Dashboard'}, {value: 'user',label:'Users'}],
+          tableHeader: ['ID','Name','E-mail','Otoritas'],
+          loading: true,
+          users:{}
         }),
         components:{
-          Header, Breadcrumb
+          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading
         },
         mounted(){
           const app = this
@@ -42,10 +38,14 @@
         },
         methods:{
           getUser(){
-            axios.get('api/user').then((resp) => {
-              console.log(resp)
+            const app =  this
+            axios.get('api/users').then((resp) => {
+              app.users = resp.data
+              app.loading = false
             })
             .catch((err) => {
+              app.loading = false
+              alert("Gagal Memuat Data User")
               console.log(err)
             })
           }
