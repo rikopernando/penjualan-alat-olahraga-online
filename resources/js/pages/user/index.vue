@@ -3,6 +3,9 @@
       <Header />
         <div class="container" style="margin-top: 70px;">
 			    <Breadcrumb active="user" :breadcrumb="breadcrumb" />
+          <br />
+          <br />
+          <router-link :to="{name: 'user_create'}" class="ui primary button">Tambah</router-link>
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />

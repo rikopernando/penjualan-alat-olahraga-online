@@ -13,6 +13,7 @@ window.Vue.use(VueRouter)
 window.$ = window.jQuery = require('jquery')
 
 Vue.use(SuiVue)
+Vue.component('selectize-component', require('vue2-selectize'))
 
 const router = new VueRouter({ routes })
 

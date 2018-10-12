@@ -44,7 +44,7 @@ class UsersController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'required'
+            'otoritas' => 'required'
         ]);  
 
         $user = User::create([
@@ -54,7 +54,7 @@ class UsersController extends Controller
               'api_token' => str_random(100)
            ]);
 
-        $role = Role::where('id',$request->role)->first();
+        $role = Role::where('id',$request->otoritas)->first();
         $user->attachRole($role);
 
         return $user;
