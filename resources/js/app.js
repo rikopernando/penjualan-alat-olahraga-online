@@ -7,12 +7,14 @@ import routes from './routers'
 import store from './store'
 import VueRouter from 'vue-router'
 import SuiVue from 'semantic-ui-vue'
+import VueSwal from 'vue-swal'
 import 'semantic-ui-css/semantic.min.css';
 
 window.Vue.use(VueRouter)
 window.$ = window.jQuery = require('jquery')
 
 Vue.use(SuiVue)
+Vue.use(VueSwal)
 Vue.component('selectize-component', require('vue2-selectize'))
 
 const router = new VueRouter({ routes })

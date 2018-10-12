@@ -5,6 +5,7 @@
 			    <Breadcrumb active="user_create" :breadcrumb="breadcrumb" />
           <br />
           <br />
+          <Loading v-if="loading" />
           <sui-form v-on:submit.prevent="saveForm()">
           <Message :header="message" :errors="errors" v-if="errors.length" />
             <TextInput 
@@ -45,9 +46,11 @@
     import Breadcrumb from '../../components/Breadcrumb'
     import TextInput from '../../components/TextInput'
     import Message from '../../components/Message'
+    import Loading from '../../components/Loading'
 
     export default {
         data: () => ({
+          loading: false,
           errors: [],
           message: '',
           breadcrumb: [{value: 'dashboard',label:'Dashboard'}, {value: 'user',label:'Users'}, {value: 'user_create',label:'Tambah User'}],
@@ -66,12 +69,15 @@
           app.$store.dispatch('otoritas/LOAD_OTORITAS')
         },
         components:{
-          Header, Breadcrumb, TextInput, Message
+          Header, Breadcrumb, TextInput, Message, Loading
         },
         methods: {
           saveForm(){
             const app = this
+            app.loading = true
             axios.post('api/users',app.users).then((resp) => {
+              app.loading = false
+              app.alert("Berhasil Menambahkan Users baru")
               app.$router.push('/user')
             })
             .catch((err) => {
@@ -92,6 +98,15 @@
               })
               app.errors = data
             }
+          },
+          alert(pesan){
+						const app = this
+						app.$swal({
+							text: pesan,
+							icon: "success",
+							buttons: false,
+							timer: 1000,
+						})
           }
         }
   };
