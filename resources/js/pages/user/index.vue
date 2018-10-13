@@ -11,8 +11,8 @@
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="users.data" v-if="users.data.length"/>
-            <TableKosong colspan="4" :text="message_table_kosong" v-else/>
+            <TableBody :data="users.data" edit="/create" v-on:delete="handleDelete" v-if="users.data.length"/>
+            <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
 					<pagination :data="users" v-on:pagination-change-page="getUser" :limit="4"></pagination>
       </div>
@@ -31,7 +31,7 @@
     export default {
         data: () => ({
           breadcrumb: [{value: 'dashboard',label:'Dashboard'}, {value: 'user',label:'Users'}],
-          tableHeader: ['ID','Name','E-mail','Otoritas'],
+          tableHeader: ['ID','Name','E-mail','Otoritas','Edit','Hapus'],
           loading: true,
           users:{},
           searchLoading: false,
@@ -70,6 +70,26 @@
               alert("Gagal Memuat Data User")
               console.log(err)
             })
+          },
+          handleDelete(id){
+						const app = this
+            axios.delete(`api/users/${id}`).then((resp) => {
+              app.alert("Berhasil menghapus data user")
+              app.getUser()
+            })
+            .catch((err) => {
+              alert(err)
+              console.log(err)
+            })
+          },
+          alert(pesan){
+						const app = this
+						app.$swal({
+							text: pesan,
+							icon: "success",
+							buttons: false,
+							timer: 1000,
+						})
           }
         }
     };
