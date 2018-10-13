@@ -16,6 +16,8 @@ window.$ = window.jQuery = require('jquery')
 Vue.use(SuiVue)
 Vue.use(VueSwal)
 Vue.component('selectize-component', require('vue2-selectize'))
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 
 const router = new VueRouter({ routes })
 

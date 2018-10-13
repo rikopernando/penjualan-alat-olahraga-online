@@ -6,12 +6,15 @@
           <br />
           <br />
           <router-link :to="{name: 'user_create'}" class="ui primary button">Tambah</router-link>
+          <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
+          <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="users.data" v-if="Object.keys(users).length"/>
-            <TableKosong colspan="4" text="Data User Kosong" v-else/>
+            <TableBody :data="users.data" v-if="users.data.length"/>
+            <TableKosong colspan="4" :text="message_table_kosong" v-else/>
           </sui-table>
+					<pagination :data="users" v-on:pagination-change-page="getUser" :limit="4"></pagination>
       </div>
     </div>
 </template>
@@ -30,7 +33,10 @@
           breadcrumb: [{value: 'dashboard',label:'Dashboard'}, {value: 'user',label:'Users'}],
           tableHeader: ['ID','Name','E-mail','Otoritas'],
           loading: true,
-          users:{}
+          users:{},
+          searchLoading: false,
+          search: '',
+          message_table_kosong: 'Data Users Kosong'
         }),
         components:{
           Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading
@@ -39,14 +45,27 @@
           const app = this
           app.getUser()
         },
+        watch: {
+          search(){
+            const app = this
+            app.searchLoading = true
+            app.getUser()
+          }
+        },
         methods:{
-          getUser(){
+          getUser(page = 1){
             const app =  this
-            axios.get('api/users').then((resp) => {
+            axios.get(`api/users?page=${page}&search=${app.search}`).then((resp) => {
               app.users = resp.data
+              app.searchLoading = false
               app.loading = false
+              if(!app.users.data.length && app.search){ 
+                app.message_table_kosong = `Oopps, Tidak ada data User yang ditemukan untuk kata kunci "${app.search}". Cobalah menggunakan kata kunci yang lain.`
+              }
+                
             })
             .catch((err) => {
+              app.searchLoading = false
               app.loading = false
               alert("Gagal Memuat Data User")
               console.log(err)

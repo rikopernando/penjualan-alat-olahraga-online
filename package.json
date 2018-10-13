@@ -20,6 +20,7 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "laravel-vue-pagination": "^2.1.0",
         "semantic-ui-css": "^2.4.0",
         "semantic-ui-vue": "^0.4.1",
         "vue-router": "^3.0.1",

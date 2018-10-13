@@ -14,9 +14,12 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('role')->orderBy('id','desc')->paginate(10);
+        $users = User::with('role')->where(function($query) use ($request){
+					$query->orwhere('name', 'LIKE', '%' . $request->search . '%')
+					->orwhere('email', 'LIKE', '%' . $request->search . '%');
+                })->orderBy('id','desc')->paginate(10);
         $data = [];
 
         foreach($users as $user){
