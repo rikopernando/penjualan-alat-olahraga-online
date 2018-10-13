@@ -71,7 +71,7 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        return User::with('role')->whereId($id)->first();
+        return User::select('id','name','email')->with('role')->whereId($id)->first();
     }
 
     /**
@@ -85,8 +85,8 @@ class UsersController extends Controller
     {
         $this->validate($request,[
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,'.$id,
-            'role' => 'required'
+            'email' => 'required|string|email|max:255|unique:users,id,'.$id,
+            'otoritas' => 'required'
         ]);  
 
         $user = User::with('role')->whereId($id);
@@ -98,8 +98,9 @@ class UsersController extends Controller
               'email' => $request->email,
            ]);
 
-        $role = Role::where('id',$request->role)->first();
-        $user->detachRole($role_lama);
+        $role = Role::where('id',$request->otoritas)->first();
+        $user = User::find($id);
+        $user->detachRole($role_lama->id);
         $user->attachRole($role);
 
         return $user;

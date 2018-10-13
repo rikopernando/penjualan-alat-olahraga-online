@@ -2,7 +2,7 @@
     <div>
       <Header />
         <div class="container" style="margin-top: 70px;">
-			    <Breadcrumb active="user_create" :breadcrumb="breadcrumb" />
+			    <Breadcrumb active="user_edit" :breadcrumb="breadcrumb" />
           <br />
           <br />
           <Loading v-if="loading" />
@@ -13,12 +13,6 @@
               type="text"
               placeholder="Name"
               v-model="users.name"
-            />
-            <TextInput 
-              label="Password"
-              type="password"
-              placeholder="Password"
-              v-model="users.password"
             />
             <TextInput 
               label="E-mail"
@@ -50,13 +44,12 @@
 
     export default {
         data: () => ({
-          breadcrumb: [{value: 'index',label:'Home'}, {value: 'user',label:'Users'}, {value: 'user_create',label:'Tambah User'}],
+          breadcrumb: [{value: 'index',label:'Home'}, {value: 'user',label:'Users'}, {value: 'user_edit',label:'Edit User'}],
           loading: false,
           errors: [],
           message: '',
           users: {
             name: '',
-            password: '',
             email: '',
             otoritas: ''
           },
@@ -67,17 +60,32 @@
         mounted(){
           const app = this
           app.$store.dispatch('otoritas/LOAD_OTORITAS')
+          app.findUser(app.$route.params.id)
         },
         components:{
           Header, Breadcrumb, TextInput, Message, Loading
         },
         methods: {
+          findUser(id){
+            const app = this
+            axios.get(`api/users/${id}`).then((resp) => {
+              const { data } = resp
+              app.users.name = data.name
+              app.users.email = data.email
+              app.users.otoritas = data.role.role_id
+            })
+            .catch((err) => {
+              console.log(err)
+              alert(err)
+            })
+          },
           saveForm(){
             const app = this
+            const id = app.$route.params.id
             app.loading = true
-            axios.post('api/users',app.users).then((resp) => {
+            axios.put(`api/users/${id}`,app.users).then((resp) => {
               app.loading = false
-              app.alert("Berhasil Menambahkan Users baru")
+              app.alert("Berhasil Mengubah User")
               app.$router.push('/user')
             })
             .catch((err) => {

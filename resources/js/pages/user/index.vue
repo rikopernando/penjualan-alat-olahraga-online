@@ -11,7 +11,7 @@
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="users.data" edit="/create" v-on:delete="handleDelete" v-if="users.data.length"/>
+            <TableBody :data="dataUsers" edit="user_edit" v-on:delete="handleDelete" v-if="dataUsers.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
 					<pagination :data="users" v-on:pagination-change-page="getUser" :limit="4"></pagination>
@@ -30,10 +30,11 @@
 
     export default {
         data: () => ({
-          breadcrumb: [{value: 'dashboard',label:'Dashboard'}, {value: 'user',label:'Users'}],
+          breadcrumb: [{value: 'index',label:'Home'}, {value: 'user',label:'Users'}],
           tableHeader: ['ID','Name','E-mail','Otoritas','Edit','Hapus'],
           loading: true,
-          users:{},
+          users: {},
+          dataUsers: [],
           searchLoading: false,
           search: '',
           message_table_kosong: 'Data Users Kosong'
@@ -57,6 +58,7 @@
             const app =  this
             axios.get(`api/users?page=${page}&search=${app.search}`).then((resp) => {
               app.users = resp.data
+              app.dataUsers = resp.data.data
               app.searchLoading = false
               app.loading = false
               if(!app.users.data.length && app.search){ 

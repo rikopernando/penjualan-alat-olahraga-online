@@ -28,6 +28,7 @@ const mutations = {
       state.is_owner= false
       state.loggedIn = false
       state.profile = {}
+      localStorage.removeItem("api_token")
     }
 }
 

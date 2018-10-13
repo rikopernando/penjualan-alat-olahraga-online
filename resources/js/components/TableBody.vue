@@ -5,7 +5,7 @@
               {{value}} 
            </sui-table-cell>
            <sui-table-cell>
-              <router-link :to="{name: edit}" class="ui green button">Edit</router-link>
+              <router-link :to="{name: edit, params: {id: item.id}}" class="ui green button">Edit</router-link>
            </sui-table-cell>
            <sui-table-cell>
                <sui-button color="red" content="Hapus" v-on:click="handleDelete(item.id)" />

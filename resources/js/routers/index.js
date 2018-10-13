@@ -2,9 +2,9 @@ import Index from '../pages/index'
 import Logout from '../pages/logout.vue'
 import Login from '../pages/login'
 import Register from '../pages/register'
-import Dashboard from '../pages/dashboard'
 import UserIndex from '../pages/user'
 import UserCreate from '../pages/user/create'
+import UserEdit from '../pages/user/edit'
 
 const routes = [
       {
@@ -29,15 +29,6 @@ const routes = [
         }
       },
       {
-        path: '/dashboard',
-        name: 'dashboard',
-        component: Dashboard,
-        meta: {
-            requiresAuth: true,
-            is_admin: true
-        }
-      },
-      {
         path: '/user',
         name: 'user',
         component: UserIndex,
@@ -50,6 +41,15 @@ const routes = [
         path: '/user/create',
         name: 'user_create',
         component: UserCreate,
+        meta: {
+            requiresAuth: true,
+            is_admin: true
+        }
+      },
+      {
+        path: '/user/edit/:id',
+        name: 'user_edit',
+        component: UserEdit,
         meta: {
             requiresAuth: true,
             is_admin: true

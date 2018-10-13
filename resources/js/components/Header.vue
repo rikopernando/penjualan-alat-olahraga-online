@@ -11,11 +11,6 @@
               v-if="this.$store.state.user.loggedIn">
                Home
             </router-link>
-            <router-link :to="{name: 'dashboard'}"
-              class="item" 
-              v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
-               Dashboard
-            </router-link>
 
             <sui-dropdown 
               text="Master Data"
