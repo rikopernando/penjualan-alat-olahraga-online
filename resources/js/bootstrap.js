@@ -37,8 +37,9 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
-console.log(localStorage.api_token)
+
 window.axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.api_token}`;
+console.log(localStorage.api_token)
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
