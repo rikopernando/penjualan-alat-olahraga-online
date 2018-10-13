@@ -5,6 +5,7 @@ import Register from '../pages/register'
 import UserIndex from '../pages/user'
 import UserCreate from '../pages/user/create'
 import UserEdit from '../pages/user/edit'
+import ProdukIndex from '../pages/produk'
 
 const routes = [
       {
@@ -50,6 +51,15 @@ const routes = [
         path: '/user/edit/:id',
         name: 'user_edit',
         component: UserEdit,
+        meta: {
+            requiresAuth: true,
+            is_admin: true
+        }
+      },
+      {
+        path: '/produk',
+        name: 'produk',
+        component: ProdukIndex,
         meta: {
             requiresAuth: true,
             is_admin: true

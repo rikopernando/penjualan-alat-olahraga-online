@@ -20,6 +20,9 @@
                     <router-link :to="{name: 'user'}" class="item"> 
                        User
                     </router-link>
+                    <router-link :to="{name: 'produk'}" class="item"> 
+                       Produk
+                    </router-link>
                   </sui-dropdown-menu>
             </sui-dropdown>
       	<sui-menu-menu position="right">
