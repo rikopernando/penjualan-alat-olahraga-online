@@ -53,6 +53,11 @@
             app.getProduk()
           }
         },
+        filters: {
+         	currency(number) {
+       		 return accounting.formatMoney(number, '', '0', '.', ',')
+      		} 
+        },
         methods:{
           getProduk(page = 1){
             const app =  this

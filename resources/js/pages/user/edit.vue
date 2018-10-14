@@ -28,7 +28,7 @@
                     </option> 
 								</selectize-component>
 						</sui-form-field>
-            <sui-button type="submit" color="black" content="Submit" />
+            <sui-button type="submit" color="black" content="Submit" v-if="!loading"  />
           </sui-form>
       </div>
     </div>

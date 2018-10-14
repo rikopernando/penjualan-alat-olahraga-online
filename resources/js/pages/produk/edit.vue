@@ -2,7 +2,7 @@
     <div>
       <Header />
         <div class="container" style="margin-top: 70px;">
-			    <Breadcrumb active="produk_create" :breadcrumb="breadcrumb" />
+			    <Breadcrumb active="produk_edit" :breadcrumb="breadcrumb" />
           <br />
           <br />
           <Loading v-if="loading" />
@@ -55,7 +55,7 @@
 
     export default {
         data: () => ({
-          breadcrumb: [{value: 'index',label:'Home'}, {value: 'produk',label:'Produk'}, {value: 'produk_create',label:'Tambah Produk'}],
+          breadcrumb: [{value: 'index',label:'Home'}, {value: 'produk',label:'Produk'}, {value: 'produk_edit',label:'Edit Produk'}],
           loading: false,
           errors: [],
           message: '',
@@ -67,6 +67,10 @@
           },
           previewFoto: ''
         }),
+        mounted(){
+          const app = this
+          app.findProduk(app.$route.params.id)
+        },
         watch: {
           'produks.foto':function(){
              const app = this
@@ -80,22 +84,39 @@
           createImage(){
             const app = this
             const file = document.getElementById('foto').files[0]
-            const image = new Image()
-            const reader = new FileReader()
+            if(file != undefined){
+                const image = new Image()
+                const reader = new FileReader()
+                reader.onload = (e) => {
+                  app.previewFoto = e.target.result
+                }
 
-            reader.onload = (e) => {
-              app.previewFoto = e.target.result
+                reader.readAsDataURL(file)
             }
-
-            reader.readAsDataURL(file)
+          },
+          findProduk(id){
+            const app = this
+            axios.get(`api/produks/${id}`).then((resp) => {
+              const { data } = resp
+              app.produks.nama = data.nama
+              app.produks.harga_jual = data.harga_jual
+              app.produks.deskripsi = data.deskripsi
+              /*app.produks.foto = data.previewFoto*/
+              app.previewFoto = data.previewFoto
+            })
+            .catch((err) => {
+              console.log(err)
+              alert(err)
+            })
           },
           saveForm(){
             const app = this
+            const id = app.$route.params.id
             app.loading = true
-            axios.post('api/produks',app.inputData()).then((resp) => {
-              console.log(resp)
+            console.log(app.inputData())
+            axios.post(`api/produks/${id}`,app.inputData()).then((resp) => {
               app.loading = false
-              app.alert("Berhasil Menambahkan Produk baru")
+              app.alert("Berhasil Mengubah Produk")
               app.$router.push('/produk')
             })
             .catch((err) => {

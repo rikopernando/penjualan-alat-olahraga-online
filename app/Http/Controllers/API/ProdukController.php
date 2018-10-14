@@ -28,7 +28,7 @@ class ProdukController extends Controller
             $data[] = [
                     'id' => $produk->id,
                     'nama' => $produk->nama,
-                    'harga_jual' => $produk->harga_jual,
+                    'harga_jual' => number_format($produk->harga_jual,0,',','.'),
                     'deskripsi' => $produk->deskripsi,
                 ];
         }
@@ -78,7 +78,18 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
-       return Produk::select('id','nama','harga_jual','deskripsi','foto')->whereId($id)->first();
+       $produk = Produk::select('id','nama','harga_jual','deskripsi','foto')->whereId($id)->first();
+      
+       $produk->foto ? $foto = url('image_produks/'.$produk->foto) : $foto = $produk->foto;
+
+       return response()->json([
+            'id' => $produk->id,
+            'nama' => $produk->nama,
+            'harga_jual' => $produk->harga_jual,
+            'deskripsi' => $produk->deskripsi,
+            'foto' => $produk->foto,
+            'previewFoto' => $foto
+       ],200);
     }
 
     /**
@@ -106,7 +117,7 @@ class ProdukController extends Controller
         ]);
 
         if($request->hasFile('foto')){
-            $foto = $request->hasFile('foto');
+            $foto = $request->file('foto');
             $this->deleteFile($produk->foto,'image_produks');
             $produk->foto = $this->uploadFile($foto);
             $produk->save();
