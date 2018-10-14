@@ -1,46 +1,11 @@
 <template>
   <div class="container" style="margin-top: 70px;">
     <sui-card-group :items-per-row="4">
-      <sui-card>
-        <sui-image :src="url"/>
+      <sui-card v-for="produk , index in dataProduks" :key="index">
+        <sui-image :src="produk.foto"/>
         <sui-card-content extra>
-          <p>Rp. 250.000</p>
-        </sui-card-content>
-      </sui-card>
-      <sui-card>
-        <sui-image :src="url"/>
-        <sui-card-content extra>
-          Rating: <sui-rating icon="star" :max-rating="4" :rating="4"/>
-        </sui-card-content>
-      </sui-card>
-      <sui-card>
-        <sui-image :src="url"/>
-        <sui-card-content extra>
-          Rating: <sui-rating icon="star" :max-rating="4" :rating="4"/>
-        </sui-card-content>
-      </sui-card>
-      <sui-card>
-        <sui-image :src="url"/>
-        <sui-card-content extra>
-          Rating: <sui-rating icon="star" :max-rating="4" :rating="4"/>
-        </sui-card-content>
-      </sui-card>
-      <sui-card>
-        <sui-image :src="url"/>
-        <sui-card-content extra>
-          Rating: <sui-rating icon="star" :max-rating="4" :rating="4"/>
-        </sui-card-content>
-      </sui-card>
-      <sui-card>
-        <sui-image :src="url"/>
-        <sui-card-content extra>
-          Rating: <sui-rating icon="star" :max-rating="4" :rating="4"/>
-        </sui-card-content>
-      </sui-card>
-      <sui-card>
-        <sui-image :src="url"/>
-        <sui-card-content extra>
-          Rating: <sui-rating icon="star" :max-rating="4" :rating="4"/>
+          <p>Rp. {{produk.harga_jual}}</p>
+          <sui-button secondary fluid>Beli Sekarang</sui-button>
         </sui-card-content>
       </sui-card>
     </sui-card-group>
@@ -49,9 +14,29 @@
 
 <script>
 export default {
-  name: 'ColumnCountCardExample',
   data: () => ({
-      url : window.location.origin + window.location.pathname + 'images/nike.jpg'
-  })
+    produks: {},
+    dataProduks: [],
+    loading: true
+  }),
+  mounted(){
+    const app = this
+    app.getProduk()
+  },
+  methods: {
+    getProduk(page = 1){
+        const app =  this
+        axios.get(`api/produks/all?page=${page}`).then((resp) => {
+          app.produks = resp.data
+          app.dataProduks = resp.data.data
+          app.loading = false
+        })
+        .catch((err) => {
+          app.loading = false
+          alert("Gagal Memuat Data Produk")
+          console.log(err)
+        })
+    }
+  }
 };
 </script>

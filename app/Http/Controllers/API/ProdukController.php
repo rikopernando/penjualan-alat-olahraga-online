@@ -15,6 +15,29 @@ class ProdukController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function all(Request $request)
+    {
+        $produks = Produk::select('id','nama','harga_jual','deskripsi','foto')->where(function($query) use ($request){
+					$query->orwhere('nama', 'LIKE', '%' . $request->search . '%')
+					->orwhere('harga_jual', 'LIKE', '%' . $request->search . '%')
+					->orwhere('deskripsi', 'LIKE', '%' . $request->search . '%');
+                })->orderBy('id','desc')->paginate(12);
+        $data = [];
+
+        foreach($produks as $produk){
+            $produk->foto ? $foto = url('image_produks/'.$produk->foto) : $foto = url('images/default_image.png');
+            $data[] = [
+                    'id' => $produk->id,
+                    'nama' => $produk->nama,
+                    'harga_jual' => number_format($produk->harga_jual,0,',','.'),
+                    'deskripsi' => $produk->deskripsi,
+                    'foto' => $foto,
+                ];
+        }
+
+        return app(PaginateController::class)->getPagination($produks, $data, '/api/produks/all');
+    }
+
     public function index(Request $request)
     {
         $produks = Produk::select('id','nama','harga_jual','deskripsi')->where(function($query) use ($request){

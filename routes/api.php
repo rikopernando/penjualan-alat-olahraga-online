@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('produks/all','API\ProdukController@all');
+
 Route::middleware('auth:api','throttle:100,10')->group(function(){
 
     Route::resource('users','API\UsersController');
