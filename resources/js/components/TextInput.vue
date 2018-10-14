@@ -1,7 +1,15 @@
 <template lang="html">
     <sui-form-field>
       <label>{{label}}</label>
-      <input 
+			<textarea v-if="type == 'textarea'"
+        :placeholder="placeholder" 
+        rows="3"
+        v-bind="$attrs"
+        v-bind:value="value"
+        v-on:input="$emit('input', $event.target.value)">
+      </textarea>	
+      <input v-else
+        :id="id"
         :placeholder="placeholder"
         :type="type"
         v-bind="$attrs"
@@ -14,6 +22,6 @@
 <script>
 export default {
     inheritAttrs: false,
-    props: ["label","placeholder","value","type"],
+    props: ["label","placeholder","value","type","id"],
 };
 </script>

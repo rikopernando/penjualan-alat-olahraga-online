@@ -11,18 +11,21 @@
             <TextInput 
               label="Name"
               type="text"
+              id="name"
               placeholder="Name"
               v-model="users.name"
             />
             <TextInput 
               label="Password"
               type="password"
+              id="password"
               placeholder="Password"
               v-model="users.password"
             />
             <TextInput 
               label="E-mail"
               type="email"
+              id="email"
               placeholder="E-mail"
               v-model="users.email"
             />

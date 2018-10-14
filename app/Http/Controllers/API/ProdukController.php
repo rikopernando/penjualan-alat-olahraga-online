@@ -47,7 +47,7 @@ class ProdukController extends Controller
         $this->validate($request,[
             'nama' => 'required|string',
             'harga_jual' => 'required|numeric|digits_between:1,11',
-            'deskripsi' => 'required|string|min:6',
+            'deskripsi' => 'required|string',
             'foto' => 'image|max:3072'
         ]);  
 
@@ -58,7 +58,7 @@ class ProdukController extends Controller
         ]);
 
         if($request->hasFile('foto')){
-            $foto = $request->hasFile('foto');
+            $foto = $request->file('foto');
             $produk->foto = $this->uploadFile($foto);
             $produk->save();
         }
@@ -139,7 +139,7 @@ class ProdukController extends Controller
             // membuat nama file random berikut extension
             $filename     = str_random(40) . '.' . $extension;
             $image_resize = Image::make($file->getRealPath());
-            $image_resize->fit(236,300);
+            $image_resize->fit(236,255);
             $image_resize->save(public_path('image_produks/' . $filename));
 
             return $filename;
