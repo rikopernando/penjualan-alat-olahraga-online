@@ -5,8 +5,7 @@
 			    <Breadcrumb active="produk_edit" :breadcrumb="breadcrumb" />
           <br />
           <br />
-          <Loading v-if="loading" />
-          <sui-form v-on:submit.prevent="saveForm()" id="form-error">
+          <form v-on:submit.prevent="saveForm()" id="form-error" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
           <Message :header="message" :errors="errors" v-if="errors.length" />
             <TextInput 
               label="Nama Produk"
@@ -39,8 +38,8 @@
             <p style="color :red; font-style:italic;">* Ukuran foto yang disarankan 236 x 255</p>
             <sui-image :src="previewFoto" size="medium" v-if="previewFoto" />
             <br />
-            <sui-button type="submit" color="black" content="Submit" v-if="!loading" />
-          </sui-form>
+            <sui-button type="submit" color="black" content="Submit"/>
+          </form>
       </div>
     </div>
 </template>

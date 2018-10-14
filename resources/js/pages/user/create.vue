@@ -5,8 +5,7 @@
 			    <Breadcrumb active="user_create" :breadcrumb="breadcrumb" />
           <br />
           <br />
-          <Loading v-if="loading" />
-          <sui-form v-on:submit.prevent="saveForm()">
+          <form v-on:submit.prevent="saveForm()" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
           <Message :header="message" :errors="errors" v-if="errors.length" />
             <TextInput 
               label="Name"
@@ -37,8 +36,8 @@
                     </option> 
 								</selectize-component>
 						</sui-form-field>
-            <sui-button type="submit" color="black" content="Submit" v-if="!loading"  />
-          </sui-form>
+            <sui-button type="submit" color="black" content="Submit"/>
+          </form>
       </div>
     </div>
 </template>

@@ -5,8 +5,7 @@
 			    <Breadcrumb active="user_edit" :breadcrumb="breadcrumb" />
           <br />
           <br />
-          <Loading v-if="loading" />
-          <sui-form v-on:submit.prevent="saveForm()">
+          <form v-on:submit.prevent="saveForm()" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
           <Message :header="message" :errors="errors" v-if="errors.length" />
             <TextInput 
               label="Name"
@@ -20,16 +19,16 @@
               placeholder="E-mail"
               v-model="users.email"
             />
-						<sui-form-field>
+						<form-field>
 							<label>Otoritas</label>
 								<selectize-component :settings="placeholder_otoritas" v-model="users.otoritas" ref="otoritas">
                     <option v-for="otoritas, index in this.$store.state.otoritas.otoritas" v-bind:value="otoritas.id">
                         {{ otoritas.display_name }}
                     </option> 
 								</selectize-component>
-						</sui-form-field>
-            <sui-button type="submit" color="black" content="Submit" v-if="!loading"  />
-          </sui-form>
+						</form-field>
+            <sui-button type="submit" color="black" content="Submit"/>
+          </form>
       </div>
     </div>
 </template>
