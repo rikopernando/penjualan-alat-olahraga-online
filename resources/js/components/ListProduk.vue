@@ -8,7 +8,13 @@
         <sui-card-content extra>
 					<h6 is="sui-header" color="grey">{{produk.nama}}</h6>
           <p>Rp. {{produk.harga_jual}}</p>
-          <sui-button secondary fluid>Beli Sekarang</sui-button>
+          <sui-button secondary fluid v-on:click="handleClick(produk)" v-if="auth.is_member">Beli Sekarang</sui-button>
+					<div class="ui fluid secondary button" data-tooltip="Silakan login sebagai pelanggan untuk belanja" data-position="top center" v-else-if="auth.is_owner || auth.is_admin">
+						Belanja Sekarang
+					</div>
+          <router-link :to="{name: 'login'}" class="ui fluid secondary button" v-if="!auth.loggedIn">
+						Belanja Sekarang
+          </router-link>
         </sui-card-content>
       </sui-card>
     </sui-card-group>
@@ -24,13 +30,15 @@ export default {
   data: () => ({
     produks: {},
     dataProduks: [],
-    loading: true
+    loading: true,
+    auth: {} 
   }),
   components: {
     Loading
   },
   mounted(){
     const app = this
+    app.auth = app.$store.state.user
     app.getProduk()
   },
   methods: {
@@ -46,7 +54,51 @@ export default {
           alert("Gagal Memuat Data Produk")
           console.log(err)
         })
+    },
+    handleClick(produk){
+        const app = this
+         app.$swal({
+						title: produk.nama,
+						content: {
+							element: "input",
+							attributes: {
+								placeholder: "Masukan Jumlah Produk",
+								type: "text",
+							},
+						},
+						buttons: {
+							cancel: true,
+							confirm: "OK"                   
+						},
+
+				 }).then((value) => {
+						if (!value) throw null;
+          	app.loading = true
+            app.addProduk(produk.id,value)
+					}) 
+    },
+		addProduk(produk,jumlah){
+      const app = this
+      axios.post('api/keranjangs',{produk:produk, jumlah:jumlah}).then((resp) => {
+        app.alert("Produk dimasukan ke Keranjang Belanja")
+        app.loading = false
+      })
+      .catch((err) => {
+        app.loading = false
+        alert(err)
+        console.log(err)
+      })
+    },
+    alert(pesan){
+      const app = this
+      app.$swal({
+        text: pesan,
+        icon: "success",
+        buttons: false,
+        timer: 1000,
+      })
     }
   }
-};
+}
 </script>
+
