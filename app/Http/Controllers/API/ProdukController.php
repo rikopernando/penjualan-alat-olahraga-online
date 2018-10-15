@@ -28,7 +28,7 @@ class ProdukController extends Controller
             $produk->foto ? $foto = url('image_produks/'.$produk->foto) : $foto = url('images/default_image.png');
             $data[] = [
                     'id' => $produk->id,
-                    'nama' => $produk->nama,
+                    'nama' => $this->namaProduk($produk->nama),
                     'harga_jual' => number_format($produk->harga_jual,0,',','.'),
                     'deskripsi' => $produk->deskripsi,
                     'foto' => $foto,
@@ -50,7 +50,7 @@ class ProdukController extends Controller
         foreach($produks as $produk){
             $data[] = [
                     'id' => $produk->id,
-                    'nama' => $produk->nama,
+                    'nama' => title_case($produk->nama),
                     'harga_jual' => number_format($produk->harga_jual,0,',','.'),
                     'deskripsi' => $produk->deskripsi,
                 ];
@@ -110,7 +110,6 @@ class ProdukController extends Controller
             'nama' => $produk->nama,
             'harga_jual' => $produk->harga_jual,
             'deskripsi' => $produk->deskripsi,
-            'foto' => $produk->foto,
             'previewFoto' => $foto
        ],200);
     }
@@ -188,6 +187,15 @@ class ProdukController extends Controller
             } catch (FileNotFoundException $e){
                // File sudah tidak ada
             }
+        }
+    }
+
+    public static function namaProduk($produks)
+    {
+        if (strlen(strip_tags($produks)) <= 33) {
+            return title_case($produks);
+        } else {
+            return '' . strip_tags(substr($produks, 0, 33)) . '...';
         }
     }
 }

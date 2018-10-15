@@ -100,7 +100,6 @@
               app.produks.nama = data.nama
               app.produks.harga_jual = data.harga_jual
               app.produks.deskripsi = data.deskripsi
-              /*app.produks.foto = data.previewFoto*/
               app.previewFoto = data.previewFoto
             })
             .catch((err) => {

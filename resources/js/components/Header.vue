@@ -2,9 +2,10 @@
   <div>
     <sui-menu fixed inverted>
       <sui-container>
-            <a href="#" is="sui-menu-item" class="header">
+            <router-link :to="{name: 'index'}"
+              class="header item">
               Project Name
-            </a>
+            </router-link>
 
             <router-link :to="{name: 'index'}"
               class="item" 
@@ -39,6 +40,11 @@
                   Register
               </router-link>
 
+              <router-link :to="{name: 'logout'}" class="item" v-if="this.$store.state.user.is_member">
+                Keranjang
+								<sui-label circular color="grey">2</sui-label>
+              </router-link>
+
               <router-link :to="{name: 'logout'}"
                 class="item"
                 v-if="this.$store.state.user.loggedIn">
@@ -66,4 +72,3 @@ img.logo {
   padding: 5em 0em;
 }
 </style>
-
