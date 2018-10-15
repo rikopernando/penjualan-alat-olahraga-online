@@ -8,6 +8,7 @@ import store from './store'
 import VueRouter from 'vue-router'
 import SuiVue from 'semantic-ui-vue'
 import VueSwal from 'vue-swal'
+import VueLazyload from 'vue-lazyload'
 import 'semantic-ui-css/semantic.min.css';
 
 window.Vue.use(VueRouter)
@@ -15,6 +16,7 @@ window.$ = window.jQuery = require('jquery')
 
 Vue.use(SuiVue)
 Vue.use(VueSwal)
+Vue.use(VueLazyload)
 Vue.component('selectize-component', require('vue2-selectize'))
 Vue.component('pagination', require('laravel-vue-pagination'));
 
