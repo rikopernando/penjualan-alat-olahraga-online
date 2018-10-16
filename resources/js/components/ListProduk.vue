@@ -39,6 +39,7 @@ export default {
   mounted(){
     const app = this
     app.auth = app.$store.state.user
+    app.$store.dispatch('keranjang/LOAD_KERANJANG')
     app.getProduk()
   },
   methods: {
@@ -56,30 +57,31 @@ export default {
         })
     },
     handleClick(produk){
-        const app = this
-         app.$swal({
-						title: produk.nama,
-						content: {
-							element: "input",
-							attributes: {
-								placeholder: "Masukan Jumlah Produk",
-								type: "text",
-							},
-						},
-						buttons: {
-							cancel: true,
-							confirm: "OK"                   
-						},
-
-				 }).then((value) => {
-						if (!value) throw null;
-          	app.loading = true
-            app.addProduk(produk.id,value)
-					}) 
+      const app = this
+       app.$swal({
+				title: produk.nama,
+				content: {
+					element: "input",
+					attributes: {
+						placeholder: "Masukan Jumlah Produk",
+						type: "text",
+					},
+				},
+				buttons: {
+					cancel: true,
+					confirm: "OK"                   
+				},
+		 }).then((value) => {
+				if (!value) throw null;
+        	app.loading = true
+          app.addProduk(produk.id,value)
+		 }) 
     },
 		addProduk(produk,jumlah){
       const app = this
       axios.post('api/keranjangs',{produk:produk, jumlah:jumlah}).then((resp) => {
+        const { jumlah } = resp.data
+        jumlah > 0 && app.$store.commit('keranjang/SET_JUMLAH')
         app.alert("Produk dimasukan ke Keranjang Belanja")
         app.loading = false
       })

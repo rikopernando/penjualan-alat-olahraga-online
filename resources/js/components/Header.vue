@@ -41,8 +41,10 @@
               </router-link>
 
               <router-link :to="{name: 'logout'}" class="item" v-if="this.$store.state.user.is_member">
-                Keranjang
-								<sui-label circular color="grey">2</sui-label>
+                  Keranjang
+								<sui-label circular color="grey">
+                  {{this.$store.state.keranjang.jumlah}}   
+                </sui-label>
               </router-link>
 
               <router-link :to="{name: 'logout'}"

@@ -63,7 +63,8 @@ class KeranjangBelanjaController extends Controller
 
             return response()->json([
                 'message' => 'Success Create Keranjang',
-                'data' => $keranjangs->first()
+                'data' => $keranjangs->first(),
+                'jumlah' => 0
             ],200);
         }else{
             $keranjangs = KeranjangBelanja::create([
@@ -76,7 +77,8 @@ class KeranjangBelanjaController extends Controller
 
             return response()->json([
                 'message' => 'Success Create Keranjang',
-                'data' => $keranjangs
+                'data' => $keranjangs,
+                'jumlah' => 1
             ],200);
         }
 
