@@ -16,12 +16,13 @@
         v-bind:value="value"
         v-on:input="$emit('input', $event.target.value)"
       >
+			<sui-label basic color="red" pointing v-if="errors">{{errors[0]}}</sui-label>
     </sui-form-field>
 </template>
 
 <script>
 export default {
     inheritAttrs: false,
-    props: ["label","placeholder","value","type","id"],
+    props: ["label","placeholder","value","type","id","errors"],
 };
 </script>

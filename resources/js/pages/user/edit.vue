@@ -6,27 +6,29 @@
           <br />
           <br />
           <form v-on:submit.prevent="saveForm()" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
-          <Message :header="message" :errors="errors" v-if="errors.length" />
             <TextInput 
               label="Name"
               type="text"
               placeholder="Name"
               v-model="users.name"
+              :errors="errors.name"
             />
             <TextInput 
               label="E-mail"
               type="email"
               placeholder="E-mail"
               v-model="users.email"
+              :errors="errors.email"
             />
-						<form-field>
+						<sui-form-field>
 							<label>Otoritas</label>
 								<selectize-component :settings="placeholder_otoritas" v-model="users.otoritas" ref="otoritas">
                     <option v-for="otoritas, index in this.$store.state.otoritas.otoritas" v-bind:value="otoritas.id">
                         {{ otoritas.display_name }}
                     </option> 
 								</selectize-component>
-						</form-field>
+			      <sui-label basic color="red" pointing v-if="errors.otoritas">{{errors.otoritas[0]}}</sui-label>
+						</sui-form-field>
             <sui-button type="submit" color="black" content="Submit"/>
           </form>
       </div>
@@ -38,8 +40,6 @@
     import Header from '../../components/Header'
     import Breadcrumb from '../../components/Breadcrumb'
     import TextInput from '../../components/TextInput'
-    import Message from '../../components/Message'
-    import Loading from '../../components/Loading'
 
     export default {
         data: () => ({
@@ -62,7 +62,7 @@
           app.findUser(app.$route.params.id)
         },
         components:{
-          Header, Breadcrumb, TextInput, Message, Loading
+          Header, Breadcrumb, TextInput
         },
         methods: {
           findUser(id){
@@ -98,12 +98,7 @@
           setError(errors){
             const app = this
             if(Object.keys(errors).length) {
-              let data = []
-              app.message = errors.message
-              Object.keys(errors.errors).forEach((error) => {
-                 data.push(errors.errors[error][0])
-              })
-              app.errors = data
+              app.errors = errors.errors
             }
           },
           alert(pesan){

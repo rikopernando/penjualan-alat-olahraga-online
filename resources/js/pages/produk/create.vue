@@ -6,13 +6,13 @@
           <br />
           <br />
           <form v-on:submit.prevent="saveForm()" id="form-error" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
-          <Message :header="message" :errors="errors" v-if="errors.length" />
             <TextInput 
               label="Nama Produk"
               type="text"
               id="nama"
               placeholder="Nama Produk"
               v-model="produks.nama"
+              :errors="errors.nama"
             />
             <TextInput 
               label="Harga Jual"
@@ -20,6 +20,7 @@
               id="harga_jual"
               placeholder="Harga Jual"
               v-model="produks.harga_jual"
+              :errors="errors.harga_jual"
             />
             <TextInput 
               label="Deskripsi Produk"
@@ -27,6 +28,7 @@
               id="deskripsi"
               placeholder="Deskripsi Produk"
               v-model="produks.deskripsi"
+              :errors="errors.deskripsi"
             />
             <TextInput 
               label="Foto"
@@ -34,6 +36,7 @@
               id="foto"
               placeholder="Foto"
               v-model="produks.foto"
+              :errors="errors.foto"
             />
             <p style="color :red; font-style:italic;">* Ukuran foto yang disarankan 236 x 255</p>
             <sui-image :src="previewFoto" size="medium" v-if="previewFoto" />
@@ -49,8 +52,6 @@
     import Header from '../../components/Header'
     import Breadcrumb from '../../components/Breadcrumb'
     import TextInput from '../../components/TextInput'
-    import Message from '../../components/Message'
-    import Loading from '../../components/Loading'
 
     export default {
         data: () => ({
@@ -73,7 +74,7 @@
           }
         },
         components:{
-          Header, Breadcrumb, TextInput, Message, Loading
+          Header, Breadcrumb, TextInput
         },
         methods: {
           createImage(){
@@ -92,7 +93,6 @@
             const app = this
             app.loading = true
             axios.post('api/produks',app.inputData()).then((resp) => {
-              console.log(resp)
               app.loading = false
               app.alert("Berhasil Menambahkan Produk baru")
               app.$router.push('/produk')
@@ -121,12 +121,7 @@
           setError(errors){
             const app = this
             if(Object.keys(errors).length) {
-              let data = []
-              app.message = errors.message
-              Object.keys(errors.errors).forEach((error) => {
-                 data.push(errors.errors[error][0])
-              })
-              app.errors = data
+              app.errors = errors.errors
             }
           },
           alert(pesan){
