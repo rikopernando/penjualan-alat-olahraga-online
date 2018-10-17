@@ -8,6 +8,7 @@ import UserEdit from '../pages/user/edit'
 import ProdukIndex from '../pages/produk'
 import ProdukCreate from '../pages/produk/create'
 import ProdukEdit from '../pages/produk/edit'
+import Keranjang from '../pages/keranjang'
 
 const routes = [
       {
@@ -83,6 +84,14 @@ const routes = [
         meta: {
             requiresAuth: true,
             is_admin: true
+        }
+      },
+      {
+        path: '/keranjang',
+        name: 'keranjang',
+        component: Keranjang,
+        meta: {
+            requiresAuth: true,
         }
       },
       {

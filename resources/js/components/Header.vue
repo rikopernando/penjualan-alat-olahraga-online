@@ -40,7 +40,7 @@
                   Register
               </router-link>
 
-              <router-link :to="{name: 'logout'}" class="item" v-if="this.$store.state.user.is_member">
+              <router-link :to="{name: 'keranjang'}" class="item" v-if="this.$store.state.user.is_member">
                   Keranjang
 								<sui-label circular color="grey">
                   {{this.$store.state.keranjang.jumlah}}   
@@ -58,6 +58,14 @@
     </sui-menu>
   </div>
 </template>
+
+<script>
+  export default {
+    mounted(){
+      this.$store.dispatch('keranjang/LOAD_KERANJANG')
+    }
+  }
+</script>
 
 <style lang="css" scoped>
 img.logo {

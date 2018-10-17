@@ -39,7 +39,6 @@ export default {
   mounted(){
     const app = this
     app.auth = app.$store.state.user
-    app.$store.dispatch('keranjang/LOAD_KERANJANG')
     app.getProduk()
   },
   methods: {

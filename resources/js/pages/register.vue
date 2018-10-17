@@ -79,8 +79,8 @@ export default {
       app.loading = true
       axios.post('register',app.register)
       .then((resp) => {
-        app.loading = false
         app.$store.commit('user/LOGIN',resp.data)
+        app.loading = false
         app.$router.replace('/')
       })
       .catch((err) => {

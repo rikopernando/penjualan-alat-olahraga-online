@@ -60,8 +60,8 @@ export default {
       axios.post('login',{email:app.email,password:app.password})
       .then((resp) => {
         localStorage.setItem('api_token',resp.data.api_token)
-        app.loading = false
         app.$store.commit('user/LOGIN',resp.data)
+        app.loading = false
         app.$router.replace('/')
       })
       .catch((err) => {

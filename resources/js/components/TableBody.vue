@@ -4,7 +4,7 @@
            <sui-table-cell v-for="value, i in item" :key="i">
               {{value}} 
            </sui-table-cell>
-           <sui-table-cell>
+           <sui-table-cell v-if="edit != 0">
               <router-link :to="{name: edit, params: {id: item.id}}" class="ui green button">Edit</router-link>
            </sui-table-cell>
            <sui-table-cell>

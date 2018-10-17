@@ -1,0 +1,90 @@
+<template>
+    <div>
+      <Header />
+        <div class="container" style="margin-top: 70px;">
+			    <Breadcrumb active="keranjang" :breadcrumb="breadcrumb" />
+          <br />
+          <br />
+					<div class="row">
+            <div class="col-md-8">
+              <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
+              <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
+            </div>
+            <div class="col-md-4">
+              <sui-segment>Total: Rp {{this.$store.state.keranjang.total}}</sui-segment>
+            </div>
+          </div>
+          <Loading v-if="loading"/>
+          <sui-table striped v-else>
+            <TableHeader :header="tableHeader" />
+            <TableBody :data="dataKeranjangs" edit="0" v-on:delete="handleDelete" v-if="dataKeranjangs.length"/>
+            <TableKosong colspan="6" :text="message_table_kosong" v-else/>
+          </sui-table>
+      </div>
+    </div>
+</template>
+
+<script>
+
+    import Header from '../../components/Header'
+    import Breadcrumb from '../../components/Breadcrumb'
+    import TableHeader from '../../components/TableHeader'
+    import TableBody from '../../components/TableBody'
+    import TableKosong from '../../components/TableKosong'
+    import Loading from '../../components/Loading'
+    import { mapState } from 'vuex'
+
+    export default {
+        data: () => ({
+          breadcrumb: [{value: 'index',label:'Home'}, {value: 'keranjang',label:'Keranjang'}],
+          tableHeader: ['ID','Produk','Jumlah','Harga Jual','Subtotal','Hapus'],
+          searchLoading: false,
+          search: '',
+          message_table_kosong: 'Data Keranjang Kosong'
+        }),
+        components:{
+          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading
+        },
+        computed: mapState({
+          keranjangs(){
+            const app = this
+            return app.$store.state.keranjang.keranjang
+          },
+          dataKeranjangs(){
+            const app = this
+            return app.$store.state.keranjang.keranjang.data
+          },
+          loading(){
+            const app = this
+            return app.$store.state.keranjang.loading
+          },
+        }),
+        watch: {
+          search(){
+            const app = this
+            app.searchLoading = true
+          },
+        },
+        methods:{
+          handleDelete(id){
+						const app = this
+            axios.delete(`api/keranjangs/${id}`).then((resp) => {
+              app.alert("Berhasil menghapus data keranjang")
+            })
+            .catch((err) => {
+              alert(err)
+              console.log(err)
+            })
+          },
+          alert(pesan){
+						const app = this
+						app.$swal({
+							text: pesan,
+							icon: "success",
+							buttons: false,
+							timer: 1000,
+						})
+          }
+        }
+    };
+</script>

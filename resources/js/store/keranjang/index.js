@@ -2,7 +2,9 @@ import { SET_KERANJANG, SET_JUMLAH } from './mutations'
 
 const state = {
     keranjang: {},
-    jumlah: 0
+    jumlah: 0,
+    total: 0,
+    loading: true
 }
 
 const getters = {
@@ -11,8 +13,11 @@ const getters = {
 
 const mutations = {
     [SET_KERANJANG] (state, keranjang) {
-      state.keranjang = keranjang
-      state.jumlah = keranjang.data.length
+      const { data, total } = keranjang
+      state.keranjang = data
+      state.jumlah = data.total
+      state.total = total ? total : 0
+      state.loading = false
     },
 
     [SET_JUMLAH] (state,jumlah) {
