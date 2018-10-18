@@ -11,7 +11,11 @@
               <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
             </div>
             <div class="col-md-4">
-              <sui-segment>Total: Rp {{this.$store.state.keranjang.total}}</sui-segment>
+              <sui-segment>
+								<h5 is="sui-header">
+                	Total: Rp {{this.$store.state.keranjang.total}}
+								</h5>
+              </sui-segment>
             </div>
           </div>
           <Loading v-if="loading"/>
@@ -38,9 +42,7 @@
         data: () => ({
           breadcrumb: [{value: 'index',label:'Home'}, {value: 'keranjang',label:'Keranjang'}],
           tableHeader: ['ID','Produk','Jumlah','Harga Jual','Subtotal','Hapus'],
-          searchLoading: false,
           search: '',
-          message_table_kosong: 'Data Keranjang Kosong'
         }),
         components:{
           Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading
@@ -58,17 +60,30 @@
             const app = this
             return app.$store.state.keranjang.loading
           },
+          searchLoading(){
+            const app = this
+            return app.$store.state.keranjang.searchLoading
+          },
+          message_table_kosong(){
+            const app = this
+            return app.$store.state.keranjang.message_table_kosong
+          }
         }),
         watch: {
           search(){
             const app = this
-            app.searchLoading = true
+            app.getKeranjang()
           },
         },
         methods:{
+          getKeranjang(page = 1){
+            const app = this
+            app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: page, search:app.search})
+          },
           handleDelete(id){
 						const app = this
             axios.delete(`api/keranjangs/${id}`).then((resp) => {
+              app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:app.search})
               app.alert("Berhasil menghapus data keranjang")
             })
             .catch((err) => {

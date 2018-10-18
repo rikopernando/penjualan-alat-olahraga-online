@@ -62,7 +62,7 @@
 <script>
   export default {
     mounted(){
-      this.$store.dispatch('keranjang/LOAD_KERANJANG')
+      this.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:''})
     }
   }
 </script>

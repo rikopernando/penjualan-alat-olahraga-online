@@ -1,2 +1,3 @@
 export const SET_KERANJANG = "SET_KERANJANG"
 export const SET_JUMLAH = "SET_JUMLAH"
+export const SET_SEARCH_LOADING = "SET_SEARCH_LOADING"
