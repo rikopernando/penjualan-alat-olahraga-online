@@ -9,6 +9,7 @@ import ProdukIndex from '../pages/produk'
 import ProdukCreate from '../pages/produk/create'
 import ProdukEdit from '../pages/produk/edit'
 import Keranjang from '../pages/keranjang'
+import Checkout from '../pages/checkout'
 
 const routes = [
       {
@@ -90,6 +91,14 @@ const routes = [
         path: '/keranjang',
         name: 'keranjang',
         component: Keranjang,
+        meta: {
+            requiresAuth: true,
+        }
+      },
+      {
+        path: '/checkout',
+        name: 'checkout',
+        component: Checkout,
         meta: {
             requiresAuth: true,
         }

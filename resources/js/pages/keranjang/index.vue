@@ -6,16 +6,22 @@
           <br />
           <br />
 					<div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
               <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
               <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <sui-segment>
-								<h5 is="sui-header">
-                	Total: Rp {{this.$store.state.keranjang.total}}
+								<h5 is="sui-header" text-align="right">
+                	Total : Rp {{this.$store.state.keranjang.total}}
 								</h5>
               </sui-segment>
+            </div>
+            <div class="col-md-2">
+              <router-link :to="{name: 'checkout'}" class="ui black icon right labeled button">
+                <sui-icon name="right arrow" />
+                Checkout
+              </router-link>
             </div>
           </div>
           <Loading v-if="loading"/>
@@ -24,6 +30,7 @@
             <TableBody :data="dataKeranjangs" edit="0" v-on:delete="handleDelete" v-if="dataKeranjangs.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
+					<pagination :data="keranjangs" v-on:pagination-change-page="getKeranjang" :limit="4"></pagination>
       </div>
     </div>
 </template>

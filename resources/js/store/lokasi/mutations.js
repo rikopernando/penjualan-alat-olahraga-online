@@ -1,0 +1,5 @@
+export const GET_PROVINSI = "GET_PROVINSI"
+export const GET_KABUPATEN = "GET_KABUPATEN"
+export const GET_KECAMATAN = "GET_KECAMATAN"
+export const GET_KELURAHAN = "GET_KELURAHAN"
+export const LOAD_DATA = "LOAD_DATA"

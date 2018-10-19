@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import user from './user'
 import otoritas from './otoritas'
 import keranjang from './keranjang'
+import lokasi from './lokasi'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,7 @@ const store = new Vuex.Store({
     awesome: true
   },
   modules : {
-    user,otoritas,keranjang
+    user,otoritas,keranjang,lokasi
   }
 })
 
