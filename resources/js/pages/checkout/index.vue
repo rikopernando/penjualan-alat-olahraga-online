@@ -5,7 +5,7 @@
 		   <Breadcrumb active="checkout" :breadcrumb="breadcrumb" />
         <br />
         <br />
-        <form v-on:submit.prevent="saveForm()" id="form-error" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
+        <form id="form-error" v-bind:class="[loadingForm ? 'ui loading form' : 'ui form']">
           <h4 class="ui dividing header">Pengiriman</h4>
             <TextInput 
               label="Nama"
@@ -75,8 +75,29 @@
               v-model="pesanans.catatan"
               :errors="errors.catatan"
             />
-          <sui-button type="submit" color="black" content="Submit"/>
         </form>
+        <h4 class="ui dividing header">Produk</h4>
+        <div class="row">
+          <div class="col-md-7">
+            <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
+            <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
+          </div>
+          <div class="col-md-3">
+            <sui-segment>
+              <h5 is="sui-header" text-align="right">
+                Total : Rp {{total}}
+              </h5>
+            </sui-segment>
+          </div>
+        </div>
+        <Loading v-if="loading"/>
+        <sui-table striped v-else>
+          <TableHeader :header="tableHeader" />
+          <TableBody :data="dataKeranjangs" edit="0" v-on:delete="handleDelete" v-if="dataKeranjangs.length"/>
+          <TableKosong colspan="6" :text="message_table_kosong" v-else/>
+        </sui-table>
+        <pagination :data="keranjangs" v-on:pagination-change-page="getKeranjang" :limit="4"></pagination>
+        <sui-button type="button" color="black" content="Submit" v-on:click="saveForm()" v-if="!loadingForm"/>
       </div>
   </div>
 </template>
@@ -87,14 +108,20 @@
   import Breadcrumb from '../../components/Breadcrumb'
   import TextInput from '../../components/TextInput'
   import SelectInput from '../../components/SelectInput'
+  import TableHeader from '../../components/TableHeader'
+  import TableBody from '../../components/TableBody'
+  import TableKosong from '../../components/TableKosong'
+  import Loading from '../../components/Loading'
   import { mapState } from 'vuex'
 
   
   export default {
     data: () => ({
-      loading: false,
+      loadingForm: false,
       breadcrumb: [{value: 'index',label:'Home'}, {value: 'keranjang',label:'Keranjang'}, {value: 'checkout',label:'Checkout'}],
+      tableHeader: ['ID','Produk','Jumlah','Harga Jual','Subtotal','Hapus'],
       errors: [],
+      search: '',
       pesanans: {
         nama: '',
         alamat : '',
@@ -131,6 +158,26 @@
        },
        total() {
         return this.$store.state.keranjang.total
+       },
+       keranjangs(){
+        const app = this
+        return app.$store.state.keranjang.keranjang
+       },
+       dataKeranjangs(){
+        const app = this
+        return app.$store.state.keranjang.keranjang.data
+       },
+       loading(){
+        const app = this
+        return app.$store.state.keranjang.loading
+       },
+       searchLoading(){
+        const app = this
+        return app.$store.state.keranjang.searchLoading
+       },
+       message_table_kosong(){
+        const app = this
+        return app.$store.state.keranjang.message_table_kosong
        }
     }),
     watch: {
@@ -145,10 +192,14 @@
       total: function(){
          const app = this
          app.pesanans.total = app.total
-      }
+      },
+      search(){
+        const app = this
+        app.getKeranjang()
+      },
     },
     components : {
-      Header, Breadcrumb, TextInput, SelectInput
+      Header, Breadcrumb, TextInput, SelectInput, TableHeader, TableBody, TableKosong, Loading
     },
     methods: {
       loadWilayah(type,id){
@@ -172,9 +223,10 @@
       },
       saveForm(){
         const app = this
-        app.loading = true
+        app.loadingForm = true
+        app.pesanans.total = app.total
         axios.post('api/pesanans',app.pesanans).then((resp) => {
-          app.loading = false
+          app.loadingForm = false
           const { data } = resp
           const { status, message } = data
           if(status == 3){
@@ -188,7 +240,7 @@
           console.log(err)
           const app = this
           const errors = err.response.data
-          app.loading = false
+          app.loadingForm = false
           app.setError(errors)
           document.getElementById("form-error").focus({reventScroll:true})
         })
@@ -198,6 +250,21 @@
         if(Object.keys(errors).length) {
           app.errors = errors.errors
         }
+      },
+      getKeranjang(page = 1){
+        const app = this
+        app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: page, search:app.search})
+      },
+      handleDelete(id){
+        const app = this
+        axios.delete(`api/keranjangs/${id}`).then((resp) => {
+          app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:app.search})
+          app.alert("Berhasil menghapus data keranjang","success",1000)
+        })
+        .catch((err) => {
+          alert(err)
+          console.log(err)
+        })
       },
       alert(pesan,icon,timer){
         const app = this

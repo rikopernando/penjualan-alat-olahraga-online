@@ -61,7 +61,8 @@ class KeranjangBelanjaController extends Controller
 
         if($keranjangs->count() > 0){
             $jumlah_produk = $keranjangs->first()->jumlah + $request->jumlah;
-            $keranjangs->update(['jumlah' => $jumlah_produk]);
+            $subtotal = $jumlah_produk * $keranjangs->first()->harga_jual;
+            $keranjangs->update(['jumlah' => $jumlah_produk, 'subtotal' => $subtotal]);
 
             return response()->json([
                 'message' => 'Success Create Keranjang',
