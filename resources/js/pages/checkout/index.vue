@@ -82,13 +82,6 @@
             <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
             <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
           </div>
-          <div class="col-md-3">
-            <sui-segment>
-              <h5 is="sui-header" text-align="right">
-                Total : Rp {{total}}
-              </h5>
-            </sui-segment>
-          </div>
         </div>
         <Loading v-if="loading"/>
         <sui-table striped v-else>
@@ -97,6 +90,11 @@
           <TableKosong colspan="6" :text="message_table_kosong" v-else/>
         </sui-table>
         <pagination :data="keranjangs" v-on:pagination-change-page="getKeranjang" :limit="4"></pagination>
+        <sui-segment>
+          <h5 is="sui-header">
+            Total : Rp {{total}}
+          </h5>
+        </sui-segment>
         <sui-button type="button" color="black" content="Submit" v-on:click="saveForm()" v-if="!loadingForm"/>
       </div>
   </div>
