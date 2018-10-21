@@ -32,30 +32,12 @@ class PesanansController extends Controller
         $data = [];
 
         foreach($pesanans as $pesanan){
-
-            switch ($pesanan->status_pesanan):
-                case 0:
-                $status = 'Pesanan Baru';
-            break;
-                case 1:
-                $status = 'Pesanan Telah Di Konfirmasi';
-            break;
-                case 2:
-                $status = 'Pesanan Sedang Di Proses';
-            break;
-                case 3:
-                $status = 'Pesanan Telah Selesai';
-            break;
-                case 4:
-                $status = 'Pesanan Di Batalkan';
-            break;
-            endswitch;
             $data[] = [
                     'id' => $pesanan->id,
                     'pelanggan' => $pesanan->pelanggan,
                     'waktu' => $pesanan->waktu,
                     'total' => number_format($pesanan->total,0,',','.'),
-                    'status_pesanan' => $status,
+                    'status_pesanan' => $pesanan->status_pesanan,
                 ];
         }
 

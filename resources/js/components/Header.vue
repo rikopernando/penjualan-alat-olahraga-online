@@ -7,9 +7,7 @@
               Project Name
             </router-link>
 
-            <router-link :to="{name: 'index'}"
-              class="item" 
-              v-if="this.$store.state.user.loggedIn">
+            <router-link :to="{name: 'index'}" class="item" v-if="this.$store.state.user.loggedIn">
                Home
             </router-link>
 
@@ -23,6 +21,17 @@
                     </router-link>
                     <router-link :to="{name: 'produk'}" class="item"> 
                        Produk
+                    </router-link>
+                  </sui-dropdown-menu>
+            </sui-dropdown>
+
+            <sui-dropdown 
+              text="Laporan"
+              item class="simple"
+              v-if="this.$store.state.user.is_owner">
+                  <sui-dropdown-menu>
+                    <router-link :to="{name: 'laporan_penjualan'}" class="item"> 
+                      Penjualan
                     </router-link>
                   </sui-dropdown-menu>
             </sui-dropdown>

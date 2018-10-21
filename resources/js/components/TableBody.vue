@@ -2,7 +2,8 @@
     <sui-table-body>
       <sui-table-row v-for="item, index in data" :key="index">
            <sui-table-cell v-for="value, i in item" :key="i">
-              {{value}} 
+              <TableStatus :status="value" v-if="i == 'status_pesanan'" />
+              <p v-else>{{value}}</p>
            </sui-table-cell>
            <sui-table-cell v-if="edit != 0">
               <router-link :to="{name: edit, params: {id: item.id}}" class="ui green button">Edit</router-link>
@@ -15,8 +16,12 @@
 </template>
 
 <script>
+  import TableStatus from './TableStatus'
   export default {
     props: ["data","edit"],
+    components: {
+      TableStatus
+    },
     methods: {
       handleDelete(id){
         const app = this

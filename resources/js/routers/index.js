@@ -10,6 +10,7 @@ import ProdukCreate from '../pages/produk/create'
 import ProdukEdit from '../pages/produk/edit'
 import Keranjang from '../pages/keranjang'
 import Checkout from '../pages/checkout'
+import LaporanPenjualan from '../pages/laporan_penjualan'
 
 const routes = [
       {
@@ -85,6 +86,15 @@ const routes = [
         meta: {
             requiresAuth: true,
             is_admin: true
+        }
+      },
+      {
+        path: '/laporan-penjualan',
+        name: 'laporan_penjualan',
+        component: LaporanPenjualan,
+        meta: {
+            requiresAuth: true,
+            is_owner: true
         }
       },
       {
