@@ -70,7 +70,7 @@ class ProdukController extends Controller
         $this->validate($request,[
             'nama' => 'required|string',
             'harga_jual' => 'required|numeric|digits_between:1,11',
-            'deskripsi' => 'required|string',
+            'deskripsi' => 'required',
             'foto' => 'image|max:3072'
         ]);  
 

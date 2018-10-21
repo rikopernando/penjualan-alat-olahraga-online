@@ -63,7 +63,7 @@ export default {
 					element: "input",
 					attributes: {
 						placeholder: "Masukan Jumlah Produk",
-						type: "text",
+						type: "number",
 					},
 				},
 				buttons: {

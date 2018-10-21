@@ -5,7 +5,7 @@
 		   <Breadcrumb active="checkout" :breadcrumb="breadcrumb" />
         <br />
         <br />
-        <form class="ui form">
+        <form v-on:submit.prevent="saveForm()" id="form-error" v-bind:class="[loading ? 'ui loading form' : 'ui form']">
           <h4 class="ui dividing header">Pengiriman</h4>
             <TextInput 
               label="Nama"
@@ -67,7 +67,15 @@
 								:loading="this.$store.state.lokasi.load_kelurahan"
               />
             </div>
-          <div class="ui button" tabindex="0">Submit Order</div>
+            <TextInput 
+              label="Catatan"
+              type="textarea"
+              id="catatan"
+              placeholder="Catatan"
+              v-model="pesanans.catatan"
+              :errors="errors.catatan"
+            />
+          <sui-button type="submit" color="black" content="Submit"/>
         </form>
       </div>
   </div>
@@ -84,6 +92,7 @@
   
   export default {
     data: () => ({
+      loading: false,
       breadcrumb: [{value: 'index',label:'Home'}, {value: 'keranjang',label:'Keranjang'}, {value: 'checkout',label:'Checkout'}],
       errors: [],
       pesanans: {
@@ -95,11 +104,13 @@
         provinsi: '',
         kabupaten: '',
         kecamatan: '',
-        kelurahan: ''
+        kelurahan: '',
+        catatan: ''
       }
     }),
     mounted(){
       const app = this
+      app.setProfile()
 			app.$store.dispatch('lokasi/LOAD_WILAYAH',{
 				type : "kabupaten",
 				id : 18,
@@ -115,6 +126,12 @@
        kelurahan() {
         return this.$store.state.lokasi.kelurahan
        },
+       profile() {
+        return this.$store.state.user.profile
+       },
+       total() {
+        return this.$store.state.keranjang.total
+       }
     }),
     watch: {
       'pesanans.kabupaten': function(){
@@ -124,6 +141,10 @@
       'pesanans.kecamatan': function(){
          const app = this
          app.loadWilayah("kelurahan",app.pesanans.kecamatan)
+      },
+      total: function(){
+         const app = this
+         app.pesanans.total = app.total
       }
     },
     components : {
@@ -136,6 +157,56 @@
            type : type,
            id : id,
         }) 
+      },
+      setProfile(){
+        const app = this
+        const { name, email, alamat, no_telp, provinsi, kabupaten, kecamatan, kelurahan } = app.profile
+        app.pesanans.nama = name
+        app.pesanans.alamat = alamat
+        app.pesanans.email = email
+        app.pesanans.no_telp = no_telp
+        app.pesanans.provinsi = provinsi
+        app.pesanans.kabupaten = kabupaten
+        app.pesanans.kecamatan = kecamatan
+        app.pesanans.kelurahan = kelurahan
+      },
+      saveForm(){
+        const app = this
+        app.loading = true
+        axios.post('api/pesanans',app.pesanans).then((resp) => {
+          app.loading = false
+          const { data } = resp
+          const { status, message } = data
+          if(status == 3){
+              app.alert("Pesanan Berhasil","success",1000)
+              app.$router.push('/')
+          }else{
+              app.alert(message,"error",3000)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          const app = this
+          const errors = err.response.data
+          app.loading = false
+          app.setError(errors)
+          document.getElementById("form-error").focus({reventScroll:true})
+        })
+      },
+      setError(errors){
+        const app = this
+        if(Object.keys(errors).length) {
+          app.errors = errors.errors
+        }
+      },
+      alert(pesan,icon,timer){
+        const app = this
+        app.$swal({
+          text: pesan,
+          icon: icon,
+          buttons: false,
+          timer: timer,
+        })
       }
     }
 }
