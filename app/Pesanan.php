@@ -14,4 +14,8 @@ class Pesanan extends Model
     {
         return $this->hasOne('App\User', 'id', 'pelanggan_id');
     }
+
+    public function detail_pesanan(){
+        return $this->hasMany('App\DetailPesanan','pesanan_id','id');
+    }
 }

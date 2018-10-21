@@ -18,9 +18,48 @@ class PesanansController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $pesanans = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan')
+            ->leftJoin('users','pesanans.pelanggan_id','users.id')
+            ->where(function ($query) use ($request){
+                $query->orWhere('users.name', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('pesanans.total', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('pesanans.metode_pembayaran', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('pesanans.alasan_batal', 'LIKE', '%' . $request->search . '%')
+                ->orWhere('pesanans.catatan', 'LIKE', '%' . $request->search . '%');
+            })->orderBy('pesanans.id','desc')->paginate(10);
+        $data = [];
+
+        foreach($pesanans as $pesanan){
+
+            switch ($pesanan->status_pesanan):
+                case 0:
+                $status = 'Pesanan Baru';
+            break;
+                case 1:
+                $status = 'Pesanan Telah Di Konfirmasi';
+            break;
+                case 2:
+                $status = 'Pesanan Sedang Di Proses';
+            break;
+                case 3:
+                $status = 'Pesanan Telah Selesai';
+            break;
+                case 4:
+                $status = 'Pesanan Di Batalkan';
+            break;
+            endswitch;
+            $data[] = [
+                    'id' => $pesanan->id,
+                    'pelanggan' => $pesanan->pelanggan,
+                    'waktu' => $pesanan->waktu,
+                    'total' => number_format($pesanan->total,0,',','.'),
+                    'status_pesanan' => $status,
+                ];
+        }
+
+        return app(PaginateController::class)->getPagination($pesanans, $data, '/api/pesanans');
     }
 
     /**
@@ -144,7 +183,7 @@ class PesanansController extends Controller
      */
     public function show($id)
     {
-        //
+        return Pesanan::with(['pelanggan','detail_pesanan'])->whereId($id)->first();
     }
 
     /**
@@ -167,6 +206,9 @@ class PesanansController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $pesanan = Pesanan::destroy($id);
+        $detail_pesanan = DetailPesanan::where('pesanan_id',$id)->delete();
+
+        return response(200);
     }
 }
