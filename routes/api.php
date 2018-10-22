@@ -25,5 +25,6 @@ Route::middleware('auth:api','throttle:100,10')->group(function(){
 	Route::get('lokasi/provinsi', 'API\LokasiController@provinsi');
 	Route::get('lokasi/pilih-wilayah/{id}/{type}', 'API\LokasiController@pilih_wilayah');
     Route::resource('pesanans','API\PesanansController');
+    Route::resource('banks','API\BanksController');
 
 });
