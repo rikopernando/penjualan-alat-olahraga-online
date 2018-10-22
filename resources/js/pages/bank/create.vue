@@ -53,7 +53,6 @@
             name: '',
             atas_nama: '',
             no_rek: '',
-            default: ''
           },
         }),
         components:{
