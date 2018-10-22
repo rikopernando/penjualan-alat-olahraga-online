@@ -10,7 +10,7 @@
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="dataPesanans" edit="produk_edit" v-on:delete="handleDelete" v-if="dataPesanans.length"/>
+            <TableBody :data="dataPesanans" labelEdit="Detail" edit="laporan_penjualan_detail" v-on:delete="handleDelete" v-if="dataPesanans.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
 					<pagination :data="pesanans" v-on:pagination-change-page="getPesanans" :limit="4"></pagination>
@@ -30,7 +30,7 @@
     export default {
         data: () => ({
           breadcrumb: [{value: 'index',label:'Home'}, {value: 'laporan_penjualan',label:'Laporan Penjualan'}],
-          tableHeader: ['ID','Pelanggan','Waktu','Total','Status','Detail','Hapus'],
+          tableHeader: ['ID Order','Pelanggan','Waktu','Total','Status','Detail','Hapus'],
           loading: true,
           search: '',
           searchLoading: '',

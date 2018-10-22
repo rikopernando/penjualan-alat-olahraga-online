@@ -165,7 +165,9 @@ class PesanansController extends Controller
      */
     public function show($id)
     {
-        return Pesanan::with(['pelanggan','detail_pesanan'])->whereId($id)->first();
+        return Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan')
+            ->leftJoin('users','pesanans.pelanggan_id','users.id')
+            ->where('pesanans.id',$id)->first();
     }
 
     /**

@@ -27,7 +27,7 @@
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="dataKeranjangs" edit="0" v-on:delete="handleDelete" v-if="dataKeranjangs.length"/>
+            <TableBody :data="dataKeranjangs" labelEdit="Edit" edit="0" v-on:delete="handleDelete" v-if="dataKeranjangs.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
 					<pagination :data="keranjangs" v-on:pagination-change-page="getKeranjang" :limit="4"></pagination>

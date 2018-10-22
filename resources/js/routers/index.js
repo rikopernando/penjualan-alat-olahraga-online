@@ -11,6 +11,7 @@ import ProdukEdit from '../pages/produk/edit'
 import Keranjang from '../pages/keranjang'
 import Checkout from '../pages/checkout'
 import LaporanPenjualan from '../pages/laporan_penjualan'
+import LaporanPenjualanDetail from '../pages/laporan_penjualan/detail'
 
 const routes = [
       {
@@ -92,6 +93,15 @@ const routes = [
         path: '/laporan-penjualan',
         name: 'laporan_penjualan',
         component: LaporanPenjualan,
+        meta: {
+            requiresAuth: true,
+            is_owner: true
+        }
+      },
+      {
+        path: '/laporan-penjualan/detail/:id',
+        name: 'laporan_penjualan_detail',
+        component: LaporanPenjualanDetail,
         meta: {
             requiresAuth: true,
             is_owner: true

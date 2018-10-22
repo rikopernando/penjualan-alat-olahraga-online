@@ -11,7 +11,7 @@
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="dataProduks" edit="produk_edit" v-on:delete="handleDelete" v-if="dataProduks.length"/>
+            <TableBody :data="dataProduks" labelEdit="Edit" edit="produk_edit" v-on:delete="handleDelete" v-if="dataProduks.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
 					<pagination :data="produks" v-on:pagination-change-page="getProduk" :limit="4"></pagination>
