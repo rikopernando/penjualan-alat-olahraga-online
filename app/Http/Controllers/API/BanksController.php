@@ -46,8 +46,8 @@ class BanksController extends Controller
     {
           $this->validate($request,[
             'name' => 'required',
-            'atas_nama' => 'required|unique:banks',
-            'no_rek' => 'required',
+            'atas_nama' => 'required',
+            'no_rek' => 'required|unique:banks',
           ]);  
 
           $bank = Bank::create([
