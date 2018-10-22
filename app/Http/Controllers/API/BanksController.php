@@ -15,7 +15,12 @@ class BanksController extends Controller
      */
     public function index(Request $request)
     {
-        $banks = Bank::select('id','name','atas_nama','no_rek','default')->paginate(10);
+        $banks = Bank::select('id','name','atas_nama','no_rek','default')
+           ->where(function ($query) use ($request){
+               $query->orwhere('name', 'LIKE', '%' . $request->search . '%')
+               ->orwhere('atas_nama', 'LIKE', '%' . $request->search . '%')
+               ->orwhere('no_rek', 'LIKE', '%' . $request->search . '%');
+           })->orderBy('id','desc')->paginate(10);
         $data = [];
 
         foreach($banks as $bank){

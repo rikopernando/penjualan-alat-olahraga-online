@@ -22,6 +22,9 @@
                     <router-link :to="{name: 'produk'}" class="item"> 
                        Produk
                     </router-link>
+                    <router-link :to="{name: 'bank'}" class="item"> 
+                       Bank
+                    </router-link>
                   </sui-dropdown-menu>
             </sui-dropdown>
 

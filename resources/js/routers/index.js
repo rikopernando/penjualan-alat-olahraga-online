@@ -12,6 +12,9 @@ import Keranjang from '../pages/keranjang'
 import Checkout from '../pages/checkout'
 import LaporanPenjualan from '../pages/laporan_penjualan'
 import LaporanPenjualanDetail from '../pages/laporan_penjualan/detail'
+import BankIndex from '../pages/bank'
+import BankCreate from '../pages/bank/create'
+import BankEdit from '../pages/bank/edit'
 
 const routes = [
       {
@@ -84,6 +87,33 @@ const routes = [
         path: '/produk/edit/:id',
         name: 'produk_edit',
         component: ProdukEdit,
+        meta: {
+            requiresAuth: true,
+            is_admin: true
+        }
+      },
+      {
+        path: '/bank',
+        name: 'bank',
+        component: BankIndex,
+        meta: {
+            requiresAuth: true,
+            is_admin: true
+        }
+      },
+      {
+        path: '/bank/create',
+        name: 'bank_create',
+        component: BankCreate,
+        meta: {
+            requiresAuth: true,
+            is_admin: true
+        }
+      },
+      {
+        path: '/bank/edit/:id',
+        name: 'bank_edit',
+        component: UserEdit,
         meta: {
             requiresAuth: true,
             is_admin: true
