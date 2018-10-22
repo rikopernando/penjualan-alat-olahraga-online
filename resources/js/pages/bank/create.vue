@@ -30,7 +30,6 @@
               v-model="banks.no_rek"
               :errors="errors.no_rek"
             />
-						</sui-form-field>
             <sui-button type="submit" color="black" content="Submit"/>
           </form>
       </div>

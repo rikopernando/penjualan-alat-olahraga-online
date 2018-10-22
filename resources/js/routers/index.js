@@ -113,7 +113,7 @@ const routes = [
       {
         path: '/bank/edit/:id',
         name: 'bank_edit',
-        component: UserEdit,
+        component: BankEdit,
         meta: {
             requiresAuth: true,
             is_admin: true

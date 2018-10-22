@@ -89,7 +89,12 @@ class BanksController extends Controller
             'no_rek' => 'required',
           ]);  
 
-          $bank = Bank::find($id)->update($request->all());
+          $bank = Bank::find($id);
+          $bank->update([
+              'name' => $request->name,
+              'atas_nama' => $request->atas_nama,
+              'no_rek' => $request->no_rek,
+          ]);
 
           return $bank;
 
