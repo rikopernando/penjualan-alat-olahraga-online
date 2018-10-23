@@ -41,7 +41,7 @@
               v-model="pesanans.alamat"
               :errors="errors.alamat"
             />
-            <div class="two fields">
+            <div class="three fields">
               <SelectInput
                 label="Kabupaten / Kota"
                 :options="kabupaten"
@@ -75,6 +75,34 @@
               v-model="pesanans.catatan"
               :errors="errors.catatan"
             />
+          <h4 class="ui dividing header">Pembayaran</h4>
+          <p style="color :red; font-style:italic;"> Pembayaran dapat dilakukan dengan cara Bank Transfer, Silakan pilih salah satu bank dibawah ini.</p>
+            <div class="three fields">
+                <SelectInput
+                  label="Bank"
+                  :options="bank"
+                  :placeholder="{placeholder: 'Pilih Bank'}"
+                  v-model="pesanans.bank"
+                  :errors="errors.bank"
+                  :loading="false"
+                />
+                <TextInput 
+                  label="Atas Nama"
+                  type="text"
+                  id="atas_nama"
+                  placeholder="Atas Nama"
+                  v-model="pesanans.atas_nama"
+                  :errors="errors.atas_nama"
+                />
+                <TextInput 
+                  label="No. Rekening"
+                  type="text"
+                  id="no_rek"
+                  placeholder="No. Rekening"
+                  v-model="pesanans.no_rek"
+                  :errors="errors.no_rek"
+                />
+            </div>
         </form>
         <h4 class="ui dividing header">Produk</h4>
         <div class="row">
@@ -119,6 +147,7 @@
       breadcrumb: [{value: 'index',label:'Home'}, {value: 'keranjang',label:'Keranjang'}, {value: 'checkout',label:'Checkout'}],
       tableHeader: ['ID','Produk','Jumlah','Harga Jual','Subtotal','Hapus'],
       errors: [],
+      bank: [],
       search: '',
       pesanans: {
         nama: '',
@@ -130,12 +159,16 @@
         kabupaten: '',
         kecamatan: '',
         kelurahan: '',
-        catatan: ''
+        catatan: '',
+        bank: '',
+        no_rek: '',
+        atas_nama: ''
       }
     }),
     mounted(){
       const app = this
       app.setProfile()
+      app.loadBank()
 			app.$store.dispatch('lokasi/LOAD_WILAYAH',{
 				type : "kabupaten",
 				id : 18,
@@ -187,6 +220,10 @@
          const app = this
          app.loadWilayah("kelurahan",app.pesanans.kecamatan)
       },
+      'pesanans.bank': function(){
+         const app = this
+         app.setBankTransfer()
+      },
       total: function(){
          const app = this
          app.pesanans.total = app.total
@@ -200,12 +237,32 @@
       Header, Breadcrumb, TextInput, SelectInput, TableHeader, TableBody, TableKosong, Loading
     },
     methods: {
+      loadBank(){
+        const app = this
+        axios.get('api/banks/all').then((resp) => {
+          app.bank = resp.data
+        })
+        .catch((err) => {
+          console.log(err)
+          alert("Gagal memuat Bank")
+        })
+      },
       loadWilayah(type,id){
          const app = this
          app.$store.dispatch('lokasi/LOAD_WILAYAH',{
            type : type,
            id : id,
         }) 
+      },
+      setBankTransfer(){
+        const app = this
+        const findIndexBank = (bank) => bank.id == app.pesanans.bank
+        const index = app.bank.findIndex(findIndexBank)
+        const data = app.bank[index]
+        app.pesanans.no_rek = data.no_rek
+        app.pesanans.atas_nama = data.atas_nama
+        document.getElementById("no_rek").readOnly = true
+        document.getElementById("atas_nama").readOnly = true
       },
       setProfile(){
         const app = this

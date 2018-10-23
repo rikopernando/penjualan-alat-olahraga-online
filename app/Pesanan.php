@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pesanan extends Model
 {
     protected $fillable = [
-        'pelanggan_id', 'total', 'metode_pembayaran', 'status_pesanan','alasan_batal','catatan'
+        'pelanggan_id', 'total', 'metode_pembayaran', 'status_pesanan','alasan_batal','catatan','kas_id'
     ];
 
     public function pelanggan()

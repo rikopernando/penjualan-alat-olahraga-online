@@ -13,6 +13,12 @@ class BanksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function all()
+    {
+        return Bank::all();
+    }
+
     public function index(Request $request)
     {
         $banks = Bank::select('id','name','atas_nama','no_rek','default')

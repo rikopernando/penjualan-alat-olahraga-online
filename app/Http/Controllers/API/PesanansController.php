@@ -93,6 +93,7 @@ class PesanansController extends Controller
                'total' => $total,
                'metode_pembayaran' => 'TRANSFER',
                'status_pesanan' => 0,
+               'kas_id' => $request->bank,
                'catatan' => $request->catatan
             ]);
 
