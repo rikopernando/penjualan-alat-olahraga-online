@@ -29,7 +29,6 @@ class BanksController extends Controller
                     'name' => $bank->name,
                     'atas_nama' => $bank->atas_nama,
                     'no_rek' => $bank->no_rek,
-                    'default' =>  $bank->default
                 ];
         }
 
