@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 Route::get('produks/all','API\ProdukController@all');
 
-Route::middleware('auth:api','throttle:100,10')->group(function(){
+Route::middleware('auth:api','throttle:200,5')->group(function(){
 
     Route::resource('users','API\UsersController');
     Route::resource('otoritas','API\OtoritasController');
@@ -27,5 +27,6 @@ Route::middleware('auth:api','throttle:100,10')->group(function(){
     Route::resource('pesanans','API\PesanansController');
     Route::get('banks/all','API\BanksController@all');
     Route::resource('banks','API\BanksController');
+    Route::resource('detail-pesanans','API\DetailPesanansController');
 
 });

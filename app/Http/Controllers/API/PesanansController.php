@@ -172,9 +172,43 @@ class PesanansController extends Controller
      */
     public function show($id)
     {
-        return Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan')
+        $pesanan = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan','banks.name as bank_transfer')
             ->leftJoin('users','pesanans.pelanggan_id','users.id')
+            ->leftJoin('banks','pesanans.kas_id','banks.id')
             ->where('pesanans.id',$id)->first();
+
+        switch ($pesanan->status_pesanan):
+            case 0:
+            $status = "Pesanan Baru, Pelanggan Belum Mengkonfirmasi Pembayaran";
+            $button_status = "Terima Pembayaran";
+        break;
+            case 1:
+            $status = "Pesanan Telah Di Konfirmasi";
+            $button_status = "Proses Pesanan";
+        break;
+            case 2:
+            $status = "Pesanan Sedang Di Proses";
+            $button_status = "Selesaikan Pesanan";
+        break;
+            case 3:
+            $status = "Pesanan Telah Selesai";
+            $button_status = "Pesanan Selesai";
+        break;
+            case 4:
+            $status = "Pesanan Dibatalkan";
+            $button_status = "Tidak Jadi Batal ?";
+        break;
+        endswitch;
+
+        return response()->json([
+            'id' => $pesanan->id,
+            'pelanggan' => $pesanan->pelanggan,
+            'total' => number_format($pesanan->total,0,',','.'),
+            'status_pesanan' => $status,
+            'waktu' => $pesanan->waktu,
+            'bank_transfer' => $pesanan->bank_transfer,
+            'button_status' => $button_status
+        ],200);
     }
 
     /**
