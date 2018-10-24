@@ -61,7 +61,10 @@ class PesanansController extends Controller
             'no_telp' => 'required',
             'kabupaten' => 'required',
             'kecamatan' => 'required',
-            'kelurahan' => 'required'
+            'kelurahan' => 'required',
+            'bank' => 'required',
+            'atas_nama' => 'required',
+            'no_rek' => 'required'
         ]);  
 
         DB::beginTransaction();
@@ -142,6 +145,9 @@ class PesanansController extends Controller
             }
 
           $keranjang->delete();
+          /*if(!$pesanan->sendMailPesananBaru()){
+            DB::rollBack();
+          }*/
           DB::commit();
           return response()->json([
             'message' => 'Transaksi Berhasil',
