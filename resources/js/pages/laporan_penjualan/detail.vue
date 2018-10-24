@@ -24,6 +24,7 @@
             </div>
             <div class="col-md-4">
               <p class="title-pesanan">Bank Transfer : {{pesanan.bank_transfer}}</p>
+              <p class="title-pesanan">Bukti Pembayaran : {{pesanan.bukti_pembayaran ? 'Lihat' : 'Pelanggan belum mengirimkan bukti pembayaran'}}</p>
             </div>
           </div>
 					<div class="row">
@@ -120,9 +121,11 @@
           },
           handleDelete(id){
 						const app = this
-            axios.delete(`api/pesanans/${id}`).then((resp) => {
-              app.alert("Berhasil menghapus data penjualan")
-              app.getPesanans()
+            axios.delete(`api/detail-pesanans/${id}`).then((resp) => {
+              const { data } = resp
+              app.pesanan.total = data.data
+              app.alert("Berhasil menghapus data produk")
+              app.getDetails()
             })
             .catch((err) => {
               alert(err)

@@ -172,7 +172,7 @@ class PesanansController extends Controller
      */
     public function show($id)
     {
-        $pesanan = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan','banks.name as bank_transfer')
+        $pesanan = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan','banks.name as bank_transfer','pesanans.bukti_pembayaran as bukti_pembayaran')
             ->leftJoin('users','pesanans.pelanggan_id','users.id')
             ->leftJoin('banks','pesanans.kas_id','banks.id')
             ->where('pesanans.id',$id)->first();
@@ -200,6 +200,8 @@ class PesanansController extends Controller
         break;
         endswitch;
 
+        $pesanan->bukti_pembayaran ? $bukti_pembayaran = url('image_bukti_bayar/'.$pesanan->bukti_pembayaran) : $bukti_pembayaran = null;
+
         return response()->json([
             'id' => $pesanan->id,
             'pelanggan' => $pesanan->pelanggan,
@@ -207,7 +209,8 @@ class PesanansController extends Controller
             'status_pesanan' => $status,
             'waktu' => $pesanan->waktu,
             'bank_transfer' => $pesanan->bank_transfer,
-            'button_status' => $button_status
+            'button_status' => $button_status,
+            'bukti_pembayaran' => $bukti_pembayaran,
         ],200);
     }
 

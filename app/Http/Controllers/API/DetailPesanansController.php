@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\DetailPesanan;
+use App\Pesanan;
 
 class DetailPesanansController extends Controller
 {
@@ -81,6 +82,15 @@ class DetailPesanansController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $detail_pesanans = DetailPesanan::whereId($id);
+        $pesanan = Pesanan::find($detail_pesanans->first()->pesanan_id);
+        $total = $pesanan->total - $detail_pesanans->first()->subtotal;
+        $pesanan->update([
+            'total' => $total
+        ]);
+        $detail_pesanans->delete();
+        return response()->json([
+            'data' => number_format($pesanan->total,0,',','.') 
+        ],200);
     }
 }

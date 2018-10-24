@@ -10,7 +10,7 @@ use App\DetailPesanan;
 class Pesanan extends Model
 {
     protected $fillable = [
-        'pelanggan_id', 'total', 'metode_pembayaran', 'status_pesanan','alasan_batal','catatan','kas_id'
+        'pelanggan_id', 'total', 'metode_pembayaran', 'status_pesanan','alasan_batal','catatan','kas_id','bukti_pembayaran'
     ];
 
     public function pelanggan()
