@@ -177,7 +177,55 @@ class PesanansController extends Controller
             ->leftJoin('banks','pesanans.kas_id','banks.id')
             ->where('pesanans.id',$id)->first();
 
-        switch ($pesanan->status_pesanan):
+        $status_pesanan = $this->statusPesanan($pesanan->status_pesanan);
+
+        $pesanan->bukti_pembayaran ? $bukti_pembayaran = url('image_bukti_bayar/'.$pesanan->bukti_pembayaran) : $bukti_pembayaran = null;
+
+        return response()->json([
+            'id' => $pesanan->id,
+            'pelanggan' => $pesanan->pelanggan,
+            'total' => number_format($pesanan->total,0,',','.'),
+            'status_pesanan' => $status_pesanan->original['status'],
+            'waktu' => $pesanan->waktu,
+            'bank_transfer' => $pesanan->bank_transfer,
+            'button_status' => $status_pesanan->original['button_status'],
+            'bukti_pembayaran' => $bukti_pembayaran,
+            'status' => $pesanan->status_pesanan == 4 ? 2 : $pesanan->status_pesanan + 1
+        ],200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+        $pesanan = Pesanan::find($id)->update(['status_pesanan' => $request->status_pesanan]);
+        $status_pesanan = $this->statusPesanan($request->status_pesanan);
+
+        return $status_pesanan;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $pesanan = Pesanan::destroy($id);
+        $detail_pesanan = DetailPesanan::where('pesanan_id',$id)->delete();
+
+        return response(200);
+    }
+
+    public function statusPesanan($status_pesanan){
+        switch ($status_pesanan):
             case 0:
             $status = "Pesanan Baru, Pelanggan Belum Mengkonfirmasi Pembayaran";
             $button_status = "Terima Pembayaran";
@@ -200,43 +248,10 @@ class PesanansController extends Controller
         break;
         endswitch;
 
-        $pesanan->bukti_pembayaran ? $bukti_pembayaran = url('image_bukti_bayar/'.$pesanan->bukti_pembayaran) : $bukti_pembayaran = null;
 
         return response()->json([
-            'id' => $pesanan->id,
-            'pelanggan' => $pesanan->pelanggan,
-            'total' => number_format($pesanan->total,0,',','.'),
-            'status_pesanan' => $status,
-            'waktu' => $pesanan->waktu,
-            'bank_transfer' => $pesanan->bank_transfer,
-            'button_status' => $button_status,
-            'bukti_pembayaran' => $bukti_pembayaran,
-        ],200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $pesanan = Pesanan::destroy($id);
-        $detail_pesanan = DetailPesanan::where('pesanan_id',$id)->delete();
-
-        return response(200);
+            'status' => $status,
+            'button_status' => $button_status
+        ]);
     }
 }

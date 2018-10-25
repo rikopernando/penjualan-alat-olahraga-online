@@ -33,8 +33,9 @@
               <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
             </div>
             <div class="col-md-4">
-              <sui-button basic content="Batalkan" icon="remove" negative/>
-              <sui-button basic v-bind:content="pesanan.button_status" icon="check" positive/>
+              <sui-button basic content="Batalkan" icon="remove" negative v-on:click="changeStatus(4)"/>
+              <sui-button basic v-bind:content="pesanan.button_status" icon="check" positive v-bind:data-tooltip="pesanan.status_pesanan"  v-if="pesanan.button_status == 'Pesanan Selesai'"/>
+              <sui-button basic v-bind:content="pesanan.button_status" icon="check" positive v-on:click="changeStatus(pesanan.status)" v-else/>
             </div>
           </div>
           <Loading v-if="loading"/>
@@ -129,6 +130,32 @@
             })
             .catch((err) => {
               alert(err)
+              console.log(err)
+            })
+          },
+          changeStatus(status_pesanan){
+            const app = this 
+            app.$swal({
+								text: "apakah anda yakin ?",
+								buttons: {
+									cancel: true,
+									confirm: "OK"                   
+								},
+						}).then((value) => {
+								if (!value) throw null
+                app.updateStatus(status_pesanan)
+						}) 
+          },
+          updateStatus(status_pesanan){
+            const app = this
+            const id = app.$route.params.id
+            axios.put(`api/pesanans/${id}`,{status_pesanan: status_pesanan}).then((resp) => {
+              app.pesanan.button_status = resp.data.button_status
+              app.pesanan.status_pesanan = resp.data.status
+              app.pesanan.status = app.pesanan.status == 4 ? 2 : app.pesanan.status + 1
+              app.alert("Berhasil Mengupdate Status Pesanan")
+            })
+            .catch((err) => {
               console.log(err)
             })
           },
