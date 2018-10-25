@@ -59,11 +59,23 @@
                 </sui-label>
               </router-link>
 
-              <router-link :to="{name: 'logout'}"
-                class="item"
-                v-if="this.$store.state.user.loggedIn">
-                  Logout
-              </router-link>
+            <sui-dropdown 
+              v-bind:text="this.$store.state.user.profile.name"
+              item class="simple"
+              v-if="this.$store.state.user.loggedIn">
+                  <sui-dropdown-menu>
+                      <router-link :to="{name: 'profil'}"
+                        class="item"
+                        v-if="this.$store.state.user.loggedIn">
+                          Profil
+                      </router-link>
+                      <router-link :to="{name: 'logout'}"
+                        class="item"
+                        v-if="this.$store.state.user.loggedIn">
+                          Logout
+                      </router-link>
+                  </sui-dropdown-menu>
+            </sui-dropdown>
 
       	</sui-menu-menu>
       </sui-container>

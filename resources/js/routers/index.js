@@ -15,6 +15,7 @@ import LaporanPenjualanDetail from '../pages/laporan_penjualan/detail'
 import BankIndex from '../pages/bank'
 import BankCreate from '../pages/bank/create'
 import BankEdit from '../pages/bank/edit'
+import Profil from '../pages/profil'
 
 const routes = [
       {
@@ -149,6 +150,14 @@ const routes = [
         path: '/checkout',
         name: 'checkout',
         component: Checkout,
+        meta: {
+            requiresAuth: true,
+        }
+      },
+      {
+        path: '/profil',
+        name: 'profil',
+        component: Profil,
         meta: {
             requiresAuth: true,
         }
