@@ -52,6 +52,19 @@ class Pesanan extends Model
         return $split[2] . ' ' . $bulan[ (int)$split[1] ] . ' ' . $split[0];
     }
 
+    public function scopeQueryPesanan($query,$request){
+            $query->select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan')
+                    ->leftJoin('users','pesanans.pelanggan_id','users.id')
+                    ->where(function ($query) use ($request){
+                        $query->orWhere('users.name', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('pesanans.total', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('pesanans.metode_pembayaran', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('pesanans.alasan_batal', 'LIKE', '%' . $request->search . '%')
+                        ->orWhere('pesanans.catatan', 'LIKE', '%' . $request->search . '%');
+                    });
+        return $query;
+    }
+
     public function sendMailPesananBaru(){
 
         $pesanan = $this;

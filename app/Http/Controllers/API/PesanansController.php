@@ -20,15 +20,7 @@ class PesanansController extends Controller
      */
     public function index(Request $request)
     {
-        $pesanans = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan')
-            ->leftJoin('users','pesanans.pelanggan_id','users.id')
-            ->where(function ($query) use ($request){
-                $query->orWhere('users.name', 'LIKE', '%' . $request->search . '%')
-                ->orWhere('pesanans.total', 'LIKE', '%' . $request->search . '%')
-                ->orWhere('pesanans.metode_pembayaran', 'LIKE', '%' . $request->search . '%')
-                ->orWhere('pesanans.alasan_batal', 'LIKE', '%' . $request->search . '%')
-                ->orWhere('pesanans.catatan', 'LIKE', '%' . $request->search . '%');
-            })->orderBy('pesanans.id','desc')->paginate(10);
+        $pesanans = Pesanan::QueryPesanan($request)->orderBy('pesanans.id','desc')->paginate(10);
         $data = [];
 
         foreach($pesanans as $pesanan){

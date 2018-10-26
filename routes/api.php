@@ -28,5 +28,6 @@ Route::middleware('auth:api','throttle:200,5')->group(function(){
     Route::get('banks/all','API\BanksController@all');
     Route::resource('banks','API\BanksController');
     Route::resource('detail-pesanans','API\DetailPesanansController');
+    Route::get('pesanan-saya','API\PesananSayaController@index');
 
 });
