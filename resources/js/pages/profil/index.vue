@@ -32,7 +32,13 @@
                   <Loading v-if="loading"/>
                   <sui-table striped v-else>
                     <TableHeader :header="tableHeader" />
-                    <TableBody :data="dataPesanans" labelEdit="Detail" edit="laporan_penjualan_detail" v-on:delete="handleDelete" v-if="dataPesanans.length"/>
+                    <TableBody
+                      :data="dataPesanans" 
+                      labelEdit="Detail" 
+                      edit="detail_pesanan_saya" 
+                      hapus="0"
+                      v-if="dataPesanans.length"
+                    />
                     <TableKosong colspan="6" :text="message_table_kosong" v-else/>
                   </sui-table>
                   <pagination :data="pesanans" v-on:pagination-change-page="getPesanan" :limit="4"></pagination>
@@ -60,7 +66,7 @@
       breadcrumb: [{value: 'index',label:'Home'}, {value: 'profil',label:'Profil'}],
       items: ['Dashboard','Pesanan Saya'],
       active: 'Dashboard',
-      tableHeader: ['ID Order','Pelanggan','Waktu','Total','Status','Detail','Hapus'],
+      tableHeader: ['ID Order','Pelanggan','Waktu','Total','Status','Detail'],
       loading: true,
       search: '',
       searchLoading: '',
@@ -107,17 +113,6 @@
           app.searchLoading = false
           app.loading = false
           alert("Gagal Memuat Data Penjualan")
-          console.log(err)
-        })
-      },
-      handleDelete(id){
-        const app = this
-        axios.delete(`api/pesanans/${id}`).then((resp) => {
-          app.alert("Berhasil menghapus data penjualan")
-          app.getPesanans()
-        })
-        .catch((err) => {
-          alert(err)
           console.log(err)
         })
       },

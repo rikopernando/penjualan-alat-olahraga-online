@@ -16,6 +16,7 @@ import BankIndex from '../pages/bank'
 import BankCreate from '../pages/bank/create'
 import BankEdit from '../pages/bank/edit'
 import Profil from '../pages/profil'
+import DetailPesananSaya from '../pages/profil/detail_pesanan'
 
 const routes = [
       {
@@ -158,6 +159,14 @@ const routes = [
         path: '/profil',
         name: 'profil',
         component: Profil,
+        meta: {
+            requiresAuth: true,
+        }
+      },
+      {
+        path: '/pesanan-saya/:id',
+        name: 'detail_pesanan_saya',
+        component: DetailPesananSaya,
         meta: {
             requiresAuth: true,
         }

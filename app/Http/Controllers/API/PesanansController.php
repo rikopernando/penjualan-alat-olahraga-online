@@ -44,6 +44,7 @@ class PesanansController extends Controller
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
         $pelanggan = Auth::User()->id;
         $total = str_replace(".","",$request->total);
         $this->validate($request,[
@@ -58,8 +59,6 @@ class PesanansController extends Controller
             'atas_nama' => 'required',
             'no_rek' => 'required'
         ]);  
-
-        DB::beginTransaction();
 
         try {
 

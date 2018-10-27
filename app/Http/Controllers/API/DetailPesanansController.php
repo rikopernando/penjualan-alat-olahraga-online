@@ -31,8 +31,8 @@ class DetailPesanansController extends Controller
             $data[] = [
                     'id' => $produk->id,
                     'nama_produk' => $produk->nama_produk,
-                    'harga_jual' => number_format($produk->harga_jual,0,',','.'),
                     'jumlah' => $produk->jumlah,
+                    'harga_jual' => number_format($produk->harga_jual,0,',','.'),
                     'subtotal' => number_format($produk->subtotal,0,',','.'),
                 ];
         }

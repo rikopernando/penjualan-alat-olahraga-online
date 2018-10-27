@@ -8,7 +8,7 @@
            <sui-table-cell v-if="edit != 0">
               <router-link :to="{name: edit, params: {id: item.id}}" class="ui green button">{{labelEdit}}</router-link>
            </sui-table-cell>
-           <sui-table-cell>
+           <sui-table-cell v-if="hapus != 0">
                <sui-button color="red" content="Hapus" v-on:click="handleDelete(item.id)" />
            </sui-table-cell>
       </sui-table-row>
@@ -18,7 +18,7 @@
 <script>
   import TableStatus from './TableStatus'
   export default {
-    props: ["data","edit","labelEdit"],
+    props: ["data","edit","labelEdit","hapus"],
     components: {
       TableStatus
     },
