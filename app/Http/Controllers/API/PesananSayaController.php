@@ -31,13 +31,13 @@ class PesananSayaController extends Controller
         return app(PaginateController::class)->getPagination($pesanans, $data, '/api/pesanan-saya');
     }
 
-    public function uploadBuktiPembayaran(Request $request){
+    public function uploadBuktiPembayaran(Request $request,$id){
 
         $this->validate($request,[
             'bukti_pembayaran' => 'image|max:3072'
         ]);  
 
-        $pesanan = Pesanan::find($request->id);	
+        $pesanan = Pesanan::find($id);	
 
         if($request->hasFile('bukti_pembayaran')){
             $bukti_pembayaran = $request->file('bukti_pembayaran');

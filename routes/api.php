@@ -29,6 +29,6 @@ Route::middleware('auth:api','throttle:200,5')->group(function(){
     Route::resource('banks','API\BanksController');
     Route::resource('detail-pesanans','API\DetailPesanansController');
     Route::get('pesanan-saya','API\PesananSayaController@index');
-    Route::post('pesanan-saya/upload-bukti-bayar','API\PesananSayaController@uploadBuktiPembayaran');
+    Route::post('pesanan-saya/upload-bukti-bayar/{id}','API\PesananSayaController@uploadBuktiPembayaran');
 
 });

@@ -1,10 +1,18 @@
 <style scoped>
-  .title-pesanan {
-    color :#050505;
-    font-style:italic;
-    font-size:unset;
-    margin-bottom:10px;
-  }
+.title-pesanan {
+   color :#050505;
+   font-style:italic;
+   font-size:unset;
+   margin-bottom:10px;
+}
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
 </style>
 
 <template lang="html">
@@ -24,7 +32,12 @@
             </div>
             <div class="col-md-4">
               <p class="title-pesanan">Bank Transfer : {{pesanan.bank_transfer}}</p>
-              <p class="title-pesanan">Bukti Pembayaran : {{pesanan.bukti_pembayaran ? 'Lihat' : 'Anda belum mengirimkan bukti Pembayaran'}}</p>
+              <p class="title-pesanan" v-if="pesanan.bukti_pembayaran">
+                Bukti Pembayaran :  <a v-bind:href="pesanan.bukti_pembayaran" target="blank">Lihat Disini</a>
+              </p>
+              <p class="title-pesanan" v-else>
+                Bukti Pembayaran : Anda belum mengirimkan bukti Pembayaran
+              </p>
             </div>
           </div>
 					<div class="row">
@@ -33,18 +46,13 @@
               <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
             </div>
             <div class="col-md-4">
-               <form class="ui form">
-                   <TextInput 
-                     label="Bukti Pembayaran"
-                     type="file"
-                     id="bukti_pembayaran"
-                     placeholder="Bukti Pembayaran"
-                     v-model="bukti_pembayaran"
-                     :errors="errors.bukti_pembayaran"
-                   />
-               </form>
               <sui-button basic content="Batalkan" icon="remove" negative v-on:click="changeStatus(4)"/>
-              <sui-button basic v-bind:content="upload ? 'Upload Sekarang' : 'Upload Bukti Pembayaran'" icon="upload" positive v-on:click="uploadBukti()"/>
+              <input type="file" class="inputfile" id="bukti_pembayaran" accept="image/*" v-on:change="uploadBukti()"/>
+              <label for="bukti_pembayaran" class="ui basic positive button" v-if="!upload">
+                <i class="ui upload icon"></i> 
+                 {{pesanan.bukti_pembayaran ? 'Upload Ulang ?' : 'Upload Bukti Pembayaran'}}
+              </label>
+              <sui-button loading content="Loading" v-else/>
             </div>
           </div>
           <Loading v-if="loading"/>
@@ -86,7 +94,6 @@
           message_table_kosong: 'Data Detail Kosong',
           pesanan: {},
           upload: false,
-          bukti_pembayaran: ''
         }),
         mounted(){
           const app = this
@@ -160,12 +167,27 @@
               app.alert("Berhasil Mengupdate Status Pesanan")
             })
             .catch((err) => {
+              alert("Gagal Update Status")
               console.log(err)
             })
           },
-          uploadBukti(){
+          uploadBukti(e){
             const app = this
-            app.upload ? app.upload = false : app.upload = true
+            const id = app.$route.params.id
+            const data = new FormData()
+						if (document.getElementById('bukti_pembayaran').files[0] != undefined) {
+							data.append('bukti_pembayaran', document.getElementById('bukti_pembayaran').files[0])
+						}
+            app.upload = true
+            axios.post(`api/pesanan-saya/upload-bukti-bayar/${id}`,data).then((resp) => {
+              app.alert("Berhasil Mengupload Bukti Pembayaran")
+              app.upload = false
+            })
+            .catch((err) => {
+              alert("Gagal Update Status")
+              app.upload = false
+              console.log(err)
+            })
           },
           alert(pesan){
 						const app = this
