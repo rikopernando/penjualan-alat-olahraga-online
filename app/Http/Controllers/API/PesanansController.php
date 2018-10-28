@@ -163,7 +163,7 @@ class PesanansController extends Controller
      */
     public function show($id)
     {
-        $pesanan = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan','banks.name as bank_transfer','pesanans.bukti_pembayaran as bukti_pembayaran')
+        $pesanan = Pesanan::select('pesanans.id as id','users.name as pelanggan','pesanans.created_at as waktu','pesanans.total as total','pesanans.status_pesanan as status_pesanan','banks.name as bank_transfer','pesanans.bukti_pembayaran as bukti_pembayaran','users.alamat as alamat')
             ->leftJoin('users','pesanans.pelanggan_id','users.id')
             ->leftJoin('banks','pesanans.kas_id','banks.id')
             ->where('pesanans.id',$id)->first();
@@ -175,6 +175,7 @@ class PesanansController extends Controller
         return response()->json([
             'id' => $pesanan->id,
             'pelanggan' => $pesanan->pelanggan,
+            'alamat' => $pesanan->alamat,
             'total' => number_format($pesanan->total,0,',','.'),
             'status_pesanan' => $status_pesanan->original['status'],
             'waktu' => $pesanan->waktu,

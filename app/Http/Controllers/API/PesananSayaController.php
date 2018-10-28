@@ -48,7 +48,7 @@ class PesananSayaController extends Controller
 
         return response()->json([
             'message' => 'Success Upload Bukti Pembayaran',
-            'data' => $pesanan
+            'data' => url('image_bukti_bayar/'.$pesanan->bukti_pembayaran) 
         ],200);
     }
 

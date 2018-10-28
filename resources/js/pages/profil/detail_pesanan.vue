@@ -180,6 +180,7 @@
 						}
             app.upload = true
             axios.post(`api/pesanan-saya/upload-bukti-bayar/${id}`,data).then((resp) => {
+              app.pesanan.bukti_pembayaran = resp.data.data
               app.alert("Berhasil Mengupload Bukti Pembayaran")
               app.upload = false
             })

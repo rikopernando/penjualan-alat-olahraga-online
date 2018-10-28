@@ -16,6 +16,7 @@
           <div class="row">
             <div class="col-md-4">
               <p class="title-pesanan">Pelanggan : {{pesanan.pelanggan}}</p>
+              <p class="title-pesanan">Alamat : {{pesanan.alamat}}</p>
               <p class="title-pesanan">Status : {{pesanan.status_pesanan}}</p>
             </div>
             <div class="col-md-4">
@@ -24,7 +25,12 @@
             </div>
             <div class="col-md-4">
               <p class="title-pesanan">Bank Transfer : {{pesanan.bank_transfer}}</p>
-              <p class="title-pesanan">Bukti Pembayaran : {{pesanan.bukti_pembayaran ? 'Lihat' : 'Pelanggan belum mengirimkan bukti pembayaran'}}</p>
+              <p class="title-pesanan" v-if="pesanan.bukti_pembayaran">
+                Bukti Pembayaran :  Pelanggan Sudah Mengirimkan Bukti Pembayaran, <a v-bind:href="pesanan.bukti_pembayaran" target="blank">Lihat Disini</a>
+              </p>
+              <p class="title-pesanan" v-else>
+                Bukti Pembayaran : Anda belum mengirimkan bukti Pembayaran
+              </p>
             </div>
           </div>
 					<div class="row">

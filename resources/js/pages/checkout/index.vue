@@ -214,11 +214,11 @@
     watch: {
       'pesanans.kabupaten': function(){
          const app = this
-         app.loadWilayah("kecamatan",app.pesanans.kabupaten)
+         app.pesanans.kabupaten && app.loadWilayah("kecamatan",app.pesanans.kabupaten)
       },
       'pesanans.kecamatan': function(){
          const app = this
-         app.loadWilayah("kelurahan",app.pesanans.kecamatan)
+         app.pesanans.kecamatan && app.loadWilayah("kelurahan",app.pesanans.kecamatan)
       },
       'pesanans.bank': function(){
          const app = this
