@@ -85,7 +85,6 @@
             })
             .catch((err) => {
               console.log(err)
-              const app = this
               const errors = err.response.data
               app.loading = false
               app.setError(errors)

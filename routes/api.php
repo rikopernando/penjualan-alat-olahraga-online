@@ -30,5 +30,6 @@ Route::middleware('auth:api','throttle:200,5')->group(function(){
     Route::resource('detail-pesanans','API\DetailPesanansController');
     Route::get('pesanan-saya','API\PesananSayaController@index');
     Route::post('pesanan-saya/upload-bukti-bayar/{id}','API\PesananSayaController@uploadBuktiPembayaran');
+    Route::post('profil/ubah-password','API\ProfilController@ubahPassword');
 
 });
