@@ -249,11 +249,6 @@ class PesanansController extends Controller
 
     public function filter(Request $request){
 
-        $this->validate($request,[
-            'dari_tanggal' => 'required',
-            'sampai_tanggal' => 'required',
-        ]);  
-
         $pesanans = Pesanan::QueryPesanan($request)
 		   	->where(DB::raw('DATE(pesanans.created_at)'), '>=', $request->dari_tanggal)
 			->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)

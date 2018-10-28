@@ -27,7 +27,8 @@
             <TableBody :data="dataPesanans" labelEdit="Detail" edit="laporan_penjualan_detail" v-on:delete="handleDelete" v-if="dataPesanans.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
-					<pagination :data="pesanans" v-on:pagination-change-page="getPesanans" :limit="4"></pagination>
+					<pagination :data="pesanans" v-on:pagination-change-page="saveForm" :limit="4" v-if="dari_tanggal && sampai_tanggal"></pagination>
+					<pagination :data="pesanans" v-on:pagination-change-page="getPesanans" :limit="4" v-else></pagination>
       </div>
     </div>
 </template>
@@ -54,7 +55,6 @@
           pesanans: {},
           dataPesanans: [],
           message_table_kosong: 'Data Penjualan Kosong',
-          errors: [],
           dari_tanggal: '',
           sampai_tanggal: ''
         }),
@@ -69,7 +69,9 @@
           search(){
               const app = this
               app.searchLoading = true
-              app.getPesanans()
+              app.dari_tanggal && app.sampai_tanggal 
+                ? app.saveForm()
+                : app.getPesanans()
           }
         },
         methods: {
@@ -94,7 +96,7 @@
           handleDelete(id){
 						const app = this
             axios.delete(`api/pesanans/${id}`).then((resp) => {
-              app.alert("Berhasil menghapus data penjualan")
+              app.alert("Berhasil menghapus data penjualan","success",1000)
               app.getPesanans()
             })
             .catch((err) => {
@@ -104,45 +106,49 @@
           },
           saveForm(page = 1){
             const app = this
-            const data = { 
-                dari_tanggal: app.dateFormat(app.dari_tanggal),
-                sampai_tanggal: app.dateFormat(app.sampai_tanggal)
+            if(app.validate()){
+                const data = { 
+                    dari_tanggal: app.dateFormat(app.dari_tanggal),
+                    sampai_tanggal: app.dateFormat(app.sampai_tanggal)
+                }
+                if(!app.search) app.loading = true
+                axios.post(`api/pesanans/filter?page=${page}&search=${app.search}`,data)
+                .then((resp) => {
+                  app.pesanans = resp.data
+                  app.dataPesanans = resp.data.data
+                  app.searchLoading = false
+                  app.loading = false
+                  if(!app.pesanans.data.length && app.search){ 
+                    app.message_table_kosong = `Oopps, Tidak ada data Penjualan yang ditemukan untuk kata kunci "${app.search}". Cobalah menggunakan kata kunci yang lain.`
+                  }
+                })
+                .catch((err) => {
+                  app.searchLoading = false
+                  app.loading = false
+                  alert("Gagal Memuat Data Penjualan")
+                })
             }
-            app.loading = true
-            axios.post(`api/pesanans/filter?page=${page}&search=${app.search}`,data)
-            .then((resp) => {
-              app.pesanans = resp.data
-              app.dataPesanans = resp.data.data
-              app.searchLoading = false
-              app.loading = false
-              if(!app.pesanans.data.length && app.search){ 
-                app.message_table_kosong = `Oopps, Tidak ada data Penjualan yang ditemukan untuk kata kunci "${app.search}". Cobalah menggunakan kata kunci yang lain.`
-              }
-            })
-            .catch((err) => {
-              app.searchLoading = false
-              app.loading = false
-              alert("Gagal Memuat Data Penjualan")
-              console.log(err)
-              const errors = err.response.data
-              app.setError(errors)
-            })
           },
-          setError(errors){
+          validate(){
             const app = this
-            if(Object.keys(errors).length) {
-              app.errors = errors.errors
+            if(!app.dari_tanggal){
+              app.alert("Dari Tanggal harus disi","error",5000) 
+              return false
+            }else if(!app.sampai_tanggal){
+              app.alert("Sampai Tanggal harus disi","error",5000) 
+              return false
             }
+            return true
           },
           dateFormat(tanggal){
             const newtanggal = "" + tanggal.getFullYear() +'-'+ ((tanggal.getMonth() + 1) > 9 ? '' : '0') + (tanggal.getMonth() + 1) +'-'+ (tanggal.getDate() > 9 ? '' : '0') + tanggal.getDate()
             return newtanggal
           },
-          alert(pesan){
+          alert(pesan,icon,timer){
 						const app = this
 						app.$swal({
 							text: pesan,
-							icon: "success",
+							icon: icon,
 							buttons: false,
 							timer: 1000,
 						})
