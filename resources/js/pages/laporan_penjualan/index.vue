@@ -5,8 +5,22 @@
 			    <Breadcrumb active="laporan_penjualan" :breadcrumb="breadcrumb" />
           <br />
           <br />
-          <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
-          <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
+          <div class="row">
+            <div class="col-md-3">
+              <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
+              <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
+            </div>
+            <div class="col-md-9">
+                <form class="ui form">
+                  <div class="four fields">
+                    <Datepicker style="margin-right: 10px;" placeholder="Dari Tanggal" v-model="filter.dari_tanggal"></Datepicker>
+                    <Datepicker style="margin-right: 10px;" placeholder="Sampai Tanggal" v-model="filter.sampai_tanggal"></Datepicker>
+                    <sui-button type="button" color="black" content="Filter" v-on:click="saveForm()"/>
+                    <sui-button type="button" color="black" content="Cetak"/>
+                  </div>
+                </form>
+            </div>
+          </div>
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
@@ -26,6 +40,9 @@
     import TableBody from '../../components/TableBody'
     import TableKosong from '../../components/TableKosong'
     import Loading from '../../components/Loading'
+    import TextInput from '../../components/TextInput'
+    import Datepicker from 'vuejs-datepicker'
+
 
     export default {
         data: () => ({
@@ -36,10 +53,15 @@
           searchLoading: '',
           pesanans: {},
           dataPesanans: [],
-          message_table_kosong: 'Data Penjualan Kosong'
+          message_table_kosong: 'Data Penjualan Kosong',
+          errors: [],
+          filter: {
+            dari_tanggal: '',
+            sampai_tanggal: ''
+          }
         }),
         components:{
-          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading
+          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading, TextInput, Datepicker
         },
         mounted(){
           const app = this
@@ -81,6 +103,9 @@
               alert(err)
               console.log(err)
             })
+          },
+          saveForm(){
+            console.log(this.filter)
           },
           alert(pesan){
 						const app = this
