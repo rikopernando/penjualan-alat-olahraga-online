@@ -40,9 +40,9 @@ router.beforeEach((to, from, next) => {
       if (!loggedIn) {
         next({ path: '/'})
       }else if(to.matched.some(record => record.meta.is_owner)){
-        role == "1" ? next() : next({path:'/'})	
-      }else if(to.matched.some(record => record.meta.is_admin)){
         (role == "2" || role == "1") ? next() : next({path:'/'})	
+      }else if(to.matched.some(record => record.meta.is_admin)){
+        role == "2" ? next() : next({path:'/'})	
       }else {
         next()
       }

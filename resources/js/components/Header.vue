@@ -14,7 +14,7 @@
             <sui-dropdown 
               text="Master Data"
               item class="simple"
-              v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
+              v-if="this.$store.state.user.is_admin">
                   <sui-dropdown-menu>
                     <router-link :to="{name: 'user'}" class="item"> 
                        User
@@ -31,7 +31,7 @@
             <sui-dropdown 
               text="Laporan"
               item class="simple"
-              v-if="this.$store.state.user.is_owner">
+              v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
                   <sui-dropdown-menu>
                     <router-link :to="{name: 'laporan_penjualan'}" class="item"> 
                       Penjualan
