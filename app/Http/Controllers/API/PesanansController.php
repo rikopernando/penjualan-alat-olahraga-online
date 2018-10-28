@@ -63,16 +63,19 @@ class PesanansController extends Controller
         try {
 
             $user = User::find($pelanggan);
-            $user->update([
+            $user_update = [
                 'name' => $request->nama,
                 'no_telp' => $request->no_telp,
-                'email' => $request->email,
                 'alamat' => $request->alamat,
                 'provinsi' => 18,
                 'kabupaten' => $request->kabupaten,
                 'kecamatan' => $request->kecamatan,
                 'kelurahan' => $request->kelurahan
-            ]);
+            ];
+            if($user->email != $request->email){
+                $user_update["email"] = $request->email;
+            }
+            $user->update($user_update);
 
             if(!$user){
                 DB::rollBack();
