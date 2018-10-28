@@ -246,4 +246,30 @@ class PesanansController extends Controller
             'button_status' => $button_status
         ]);
     }
+
+    public function filter(Request $request){
+
+        $this->validate($request,[
+            'dari_tanggal' => 'required',
+            'sampai_tanggal' => 'required',
+        ]);  
+
+        $pesanans = Pesanan::QueryPesanan($request)
+		   	->where(DB::raw('DATE(pesanans.created_at)'), '>=', $request->dari_tanggal)
+			->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)
+            ->orderBy('pesanans.id','desc')->paginate(10);
+        $data = [];
+
+        foreach($pesanans as $pesanan){
+            $data[] = [
+                    'id' => $pesanan->id,
+                    'pelanggan' => $pesanan->pelanggan,
+                    'waktu' => $pesanan->waktu,
+                    'total' => number_format($pesanan->total,0,',','.'),
+                    'status_pesanan' => $pesanan->status_pesanan,
+                ];
+        }
+
+        return app(PaginateController::class)->getPagination($pesanans, $data, '/api/pesanans-filter');
+    }
 }

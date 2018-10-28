@@ -13,8 +13,8 @@
             <div class="col-md-9">
                 <form class="ui form">
                   <div class="four fields">
-                    <Datepicker style="margin-right: 10px;" placeholder="Dari Tanggal" v-model="filter.dari_tanggal"></Datepicker>
-                    <Datepicker style="margin-right: 10px;" placeholder="Sampai Tanggal" v-model="filter.sampai_tanggal"></Datepicker>
+                    <Datepicker style="margin-right: 10px;" placeholder="Dari Tanggal" v-model="dari_tanggal"></Datepicker>
+                    <Datepicker style="margin-right: 10px;" placeholder="Sampai Tanggal" v-model="sampai_tanggal"></Datepicker>
                     <sui-button type="button" color="black" content="Filter" v-on:click="saveForm()"/>
                     <sui-button type="button" color="black" content="Cetak"/>
                   </div>
@@ -55,10 +55,8 @@
           dataPesanans: [],
           message_table_kosong: 'Data Penjualan Kosong',
           errors: [],
-          filter: {
-            dari_tanggal: '',
-            sampai_tanggal: ''
-          }
+          dari_tanggal: '',
+          sampai_tanggal: ''
         }),
         components:{
           Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading, TextInput, Datepicker
@@ -104,8 +102,41 @@
               console.log(err)
             })
           },
-          saveForm(){
-            console.log(this.filter)
+          saveForm(page = 1){
+            const app = this
+            const data = { 
+                dari_tanggal: app.dateFormat(app.dari_tanggal),
+                sampai_tanggal: app.dateFormat(app.sampai_tanggal)
+            }
+            app.loading = true
+            axios.post(`api/pesanans/filter?page=${page}&search=${app.search}`,data)
+            .then((resp) => {
+              app.pesanans = resp.data
+              app.dataPesanans = resp.data.data
+              app.searchLoading = false
+              app.loading = false
+              if(!app.pesanans.data.length && app.search){ 
+                app.message_table_kosong = `Oopps, Tidak ada data Penjualan yang ditemukan untuk kata kunci "${app.search}". Cobalah menggunakan kata kunci yang lain.`
+              }
+            })
+            .catch((err) => {
+              app.searchLoading = false
+              app.loading = false
+              alert("Gagal Memuat Data Penjualan")
+              console.log(err)
+              const errors = err.response.data
+              app.setError(errors)
+            })
+          },
+          setError(errors){
+            const app = this
+            if(Object.keys(errors).length) {
+              app.errors = errors.errors
+            }
+          },
+          dateFormat(tanggal){
+            const newtanggal = "" + tanggal.getFullYear() +'-'+ ((tanggal.getMonth() + 1) > 9 ? '' : '0') + (tanggal.getMonth() + 1) +'-'+ (tanggal.getDate() > 9 ? '' : '0') + tanggal.getDate()
+            return newtanggal
           },
           alert(pesan){
 						const app = this
