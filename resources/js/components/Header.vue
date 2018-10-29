@@ -86,7 +86,9 @@
 <script>
   export default {
     mounted(){
-      this.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:''})
+      const app = this
+      const pelanggan = app.$store.state.user.profile.id 
+      this.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:'',pelanggan:pelanggan})
     }
   }
 </script>

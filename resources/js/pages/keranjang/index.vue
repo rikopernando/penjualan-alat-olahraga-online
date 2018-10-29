@@ -76,6 +76,10 @@
           message_table_kosong(){
             const app = this
             return app.$store.state.keranjang.message_table_kosong
+          },
+          profile(){
+            const app = this
+            return app.$store.state.user.profile
           }
         }),
         watch: {
@@ -87,12 +91,20 @@
         methods:{
           getKeranjang(page = 1){
             const app = this
-            app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: page, search:app.search})
+            app.$store.dispatch('keranjang/LOAD_KERANJANG',{
+              page: page,
+              search: app.search,
+              pelanggan: app.profile.id
+            })
           },
           handleDelete(id){
 						const app = this
             axios.delete(`api/keranjangs/${id}`).then((resp) => {
-              app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:app.search})
+              app.$store.dispatch('keranjang/LOAD_KERANJANG',{
+                page: 1,
+                search: app.search,
+                pelanggan: app.profile.id
+              })
               app.alert("Berhasil menghapus data keranjang")
             })
             .catch((err) => {

@@ -152,6 +152,7 @@
       bank: [],
       search: '',
       pesanans: {
+        id: '',
         nama: '',
         alamat : '',
         email: '',
@@ -268,7 +269,8 @@
       },
       setProfile(){
         const app = this
-        const { name, email, alamat, no_telp, provinsi, kabupaten, kecamatan, kelurahan } = app.profile
+        const { id, name, email, alamat, no_telp, provinsi, kabupaten, kecamatan, kelurahan } = app.profile
+        app.pesanans.id = id
         app.pesanans.nama = name
         app.pesanans.alamat = alamat
         app.pesanans.email = email

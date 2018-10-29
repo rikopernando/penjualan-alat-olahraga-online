@@ -78,7 +78,8 @@ export default {
     },
 		addProduk(produk,jumlah){
       const app = this
-      axios.post('api/keranjangs',{produk:produk, jumlah:jumlah}).then((resp) => {
+      const pelanggan = app.$store.state.user.profile.id 
+      axios.post('api/keranjangs',{produk:produk, jumlah:jumlah, pelanggan:pelanggan}).then((resp) => {
         const { jumlah } = resp.data
         jumlah > 0 && app.$store.commit('keranjang/SET_JUMLAH')
         app.alert("Produk dimasukan ke Keranjang Belanja")

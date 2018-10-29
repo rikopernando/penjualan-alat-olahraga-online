@@ -45,7 +45,7 @@ class PesanansController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $pelanggan = Auth::User()->id;
+        $pelanggan = $request->id;
         $total = str_replace(".","",$request->total);
         $this->validate($request,[
             'nama' => 'required|string',

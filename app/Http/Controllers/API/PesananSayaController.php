@@ -14,7 +14,7 @@ class PesananSayaController extends Controller
 {
     //
     public function index(Request $request){
-        $me = Auth::User()->id;
+        $me = $request->pelanggan;
         $pesanans = Pesanan::QueryPesanan($request)->where('pesanans.pelanggan_id',$me)->orderBy('pesanans.id','desc')->paginate(10);
         $data = [];
 

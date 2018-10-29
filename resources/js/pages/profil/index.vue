@@ -103,6 +103,7 @@
       dataPesanans: [],
       message_table_kosong: 'Pesanan Anda Kosong',
       users : {
+        pelanggan: '',
         password_lama: '',
         password: '',
         password_confirmation: ''
@@ -141,7 +142,8 @@
 			},
       getPesanan(page = 1){
         const app = this
-        axios.get(`api/pesanan-saya?page=${page}&search=${app.search}`).then((resp) => {
+        const pelanggan = app.profile.id
+        axios.get(`api/pesanan-saya?page=${page}&search=${app.search}&pelanggan=${pelanggan}`).then((resp) => {
           app.pesanans = resp.data
           app.dataPesanans = resp.data.data
           app.searchLoading = false
@@ -160,6 +162,7 @@
       saveForm(){
         const app = this
         app.loadingUbahPassword = true
+        app.users.pelanggan = app.profile.id
         axios.post(`api/profil/ubah-password`,app.users).then((resp) => {
           app.loadingUbahPassword = false
           app.alert(resp.data.message)

@@ -18,7 +18,7 @@ class ProfilController extends Controller
             'password' => 'required|string|min:6|confirmed',
         ]);  
 
-        $user = User::find(Auth::User()->id);
+        $user = User::find($request->pelanggan);
         $user->update(['password' => Hash::make($request->password)]);
         return response()->json([
             'message' => 'Berhasil Ubah Password' 

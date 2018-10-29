@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\KeranjangBelanja;
 use App\Produk;
+use App\User;
 use Auth;
 use DB;
 
@@ -18,7 +19,7 @@ class KeranjangBelanjaController extends Controller
      */
     public function index(Request $request)
     {
-        $pelanggan = Auth::User()->id;
+        $pelanggan = $request->pelanggan;
         $keranjangs = KeranjangBelanja::select('keranjang_belanjas.id','produks.nama','keranjang_belanjas.jumlah','keranjang_belanjas.harga_jual','keranjang_belanjas.subtotal')
                      ->leftJoin('produks','keranjang_belanjas.produk_id','produks.id')
                      ->where('keranjang_belanjas.pelanggan_id',$pelanggan)->where(function ($query) use ($request){
@@ -42,7 +43,7 @@ class KeranjangBelanjaController extends Controller
 
         return response()->json([
             'data' =>  app(PaginateController::class)->getPagination($keranjangs, $data, '/api/keranjangs'),
-            'total' => number_format($this->getSubtotal(),0,',','.')
+            'total' => number_format($this->getSubtotal($pelanggan),0,',','.')
         ],200); 
     }
 
@@ -57,7 +58,7 @@ class KeranjangBelanjaController extends Controller
 
         $produk = Produk::select('harga_jual')->whereId($request->produk)->first();
 
-        $keranjangs = KeranjangBelanja::where('pelanggan_id',Auth::User()->id)->where('produk_id',$request->produk);
+        $keranjangs = KeranjangBelanja::where('pelanggan_id',$request->pelanggan)->where('produk_id',$request->produk);
 
         if($keranjangs->count() > 0){
             $jumlah_produk = $keranjangs->first()->jumlah + $request->jumlah;
@@ -71,7 +72,7 @@ class KeranjangBelanjaController extends Controller
             ],200);
         }else{
             $keranjangs = KeranjangBelanja::create([
-                'pelanggan_id' => Auth::User()->id,
+                'pelanggan_id' => $request->pelanggan,
                 'produk_id' => $request->produk,
                 'jumlah' => $request->jumlah,
                 'harga_jual' => $produk->harga_jual,
@@ -138,8 +139,7 @@ class KeranjangBelanjaController extends Controller
         return KeranjangBelanja::destroy($id);
     }
 
-    public function getSubtotal(){
-        $pelanggan = Auth::User()->id;
+    public function getSubtotal($pelanggan){
         return KeranjangBelanja::select([DB::raw('SUM(subtotal) as subtotal')])->where('pelanggan_id',$pelanggan)->first()->subtotal;
     }
 }

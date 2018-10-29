@@ -39,7 +39,7 @@ const actions = {
 
 		LOAD_KERANJANG: ({commit},pencarian) => {
 			commit(SET_SEARCH_LOADING,true)
-			axios.get(`api/keranjangs?page=${pencarian.page}&search=${pencarian.search}`)
+			axios.get(`api/keranjangs?page=${pencarian.page}&search=${pencarian.search}&pelanggan=${pencarian.pelanggan}`)
 			.then((resp) => {
 				commit(SET_KERANJANG,{keranjang: resp.data, pencarian:pencarian})
 			  commit(SET_SEARCH_LOADING,false)
