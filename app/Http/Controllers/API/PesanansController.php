@@ -270,4 +270,33 @@ class PesanansController extends Controller
 
         return app(PaginateController::class)->getPagination($pesanans, $data, '/api/pesanans-filter');
     }
+
+    public function cetak(Request $request){
+
+        $pesanans = Pesanan::QueryPesanan($request)
+		   	->where(DB::raw('DATE(pesanans.created_at)'), '>=', $request->dari_tanggal)
+			->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)
+            ->orderBy('pesanans.id','desc')->get();
+        $data = [];
+        $total = 0;
+
+        foreach($pesanans as $pesanan){
+            $status_pesanan = $this->statusPesanan($pesanan->status_pesanan);
+            $total += $pesanan->total;
+            $data[] = [
+                    'id' => $pesanan->id,
+                    'pelanggan' => $pesanan->pelanggan,
+                    'waktu' => $pesanan->waktu,
+                    'total' => number_format($pesanan->total,0,',','.'),
+                    'status_pesanan' => $status_pesanan->original['status'],
+                ];
+        }
+
+    	return view('penjualan.cetak', [
+                'penjualan' => $data,
+                'dari_tanggal' => $request->dari_tanggal,
+                'sampai_tanggal' => $request->sampai_tanggal,
+                'total' => number_format($total,0,',','.')
+        ])->with(compact('html'));
+    }
 }

@@ -16,7 +16,7 @@
                     <Datepicker style="margin-right: 10px;" placeholder="Dari Tanggal" v-model="dari_tanggal"></Datepicker>
                     <Datepicker style="margin-right: 10px;" placeholder="Sampai Tanggal" v-model="sampai_tanggal"></Datepicker>
                     <sui-button type="button" color="black" content="Filter" v-on:click="saveForm()"/>
-                    <sui-button type="button" color="black" content="Cetak"/>
+                    <sui-button type="button" color="black" content="Cetak" v-on:click="cetak()"/>
                   </div>
                 </form>
             </div>
@@ -127,6 +127,14 @@
                   app.loading = false
                   alert("Gagal Memuat Data Penjualan")
                 })
+            }
+          },
+          cetak(){
+            const app = this
+            if(app.validate()){
+                const dari_tanggal = app.dateFormat(app.dari_tanggal)
+                const sampai_tanggal = app.dateFormat(app.sampai_tanggal)
+                window.open(`pesanans-cetak-penjualan?dari_tanggal=${dari_tanggal}&sampai_tanggal=${sampai_tanggal}`,'_blank');
             }
           },
           validate(){

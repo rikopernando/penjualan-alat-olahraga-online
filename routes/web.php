@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 route::get('/auth', 'AuthController@auth');
+route::get('pesanans-cetak-penjualan', 'API\PesanansController@cetak');
 
 Auth::routes();
 
