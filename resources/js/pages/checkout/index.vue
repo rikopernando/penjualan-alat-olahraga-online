@@ -125,6 +125,7 @@
         </sui-segment>
         <sui-button type="button" color="black" content="Submit" v-on:click="saveForm()" v-if="!loadingForm"/>
       </div>
+    <Footer />
   </div>
 </template>
 
@@ -138,6 +139,7 @@
   import TableBody from '../../components/TableBody'
   import TableKosong from '../../components/TableKosong'
   import Loading from '../../components/Loading'
+  import Footer from '../../components/Footer'
   import { mapState } from 'vuex'
 
   
@@ -234,7 +236,7 @@
       },
     },
     components : {
-      Header, Breadcrumb, TextInput, SelectInput, TableHeader, TableBody, TableKosong, Loading
+      Header, Breadcrumb, TextInput, SelectInput, TableHeader, TableBody, TableKosong, Loading, Footer
     },
     methods: {
       loadBank(){

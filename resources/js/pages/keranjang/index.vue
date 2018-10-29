@@ -32,6 +32,7 @@
           </sui-table>
 					<pagination :data="keranjangs" v-on:pagination-change-page="getKeranjang" :limit="4"></pagination>
       </div>
+      <Footer />
     </div>
 </template>
 
@@ -43,6 +44,7 @@
     import TableBody from '../../components/TableBody'
     import TableKosong from '../../components/TableKosong'
     import Loading from '../../components/Loading'
+    import Footer from '../../components/Footer'
     import { mapState } from 'vuex'
 
     export default {
@@ -52,7 +54,7 @@
           search: '',
         }),
         components:{
-          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading
+          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading, Footer
         },
         computed: mapState({
           keranjangs(){
