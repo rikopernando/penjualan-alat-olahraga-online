@@ -28,11 +28,11 @@
               <sui-grid-column :width="5">
 								<br />
 								<p>Jumlah Kuantitas</p>
-								<sui-button attached="left" icon="minus" />
+								<sui-button attached="left" icon="minus" v-on:click="lessProduk()"/>
 								<div class="ui input">
 									<input type="number" placeholder="Jumlah Produk" v-model="pesanans.jumlah_produk" style="text-align:center;">
 								</div>
-								<sui-button attached="right" icon="plus" />
+								<sui-button attached="right" icon="plus" v-on:click="addProduk()"/>
                 <p style="color :red; font-style:italic;margin-top:25px;">Sisa Produk : {{produks.stok}}</p>
 								<div style="margin-top:25px;">
 										<sui-button primary>Beli Sekarang</sui-button>
@@ -70,6 +70,16 @@
         mounted(){
           const app = this
           app.findProduk(app.$route.params.id)
+        },
+        watch : {
+          'pesanans.jumlah_produk' : function(){
+             const app = this
+            if(app.pesanans.jumlah_produk == 0){
+              app.pesanans.jumlah_produk = 1
+            }else if(app.pesanans.jumlah_produk > app.produks.stok){
+              app.pesanans.jumlah_produk = app.produks.stok
+            }
+          }
         },
         components:{
           Header, Breadcrumb, Loading, Footer
@@ -109,6 +119,14 @@
               app.loading = false
               alert(err)
             })
+          },
+          lessProduk(){
+            const app = this
+            app.pesanans.jumlah_produk = parseInt(app.pesanans.jumlah_produk) - 1
+          },
+          addProduk(){
+            const app = this
+            app.pesanans.jumlah_produk = parseInt(app.pesanans.jumlah_produk) + 1
           },
           alert(pesan){
 						const app = this
