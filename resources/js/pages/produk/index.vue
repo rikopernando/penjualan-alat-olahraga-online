@@ -31,7 +31,7 @@
     export default {
         data: () => ({
           breadcrumb: [{value: 'index',label:'Home'}, {value: 'produk',label:'Produk'}],
-          tableHeader: ['ID','Nama Produk','Harga Jual','Deskripsi','Edit','Hapus'],
+          tableHeader: ['ID','Nama Produk','Harga Jual','Warna','Stok','Deskripsi','Edit','Hapus'],
           loading: true,
           produks: {},
           dataProduks: [],

@@ -17,7 +17,7 @@ class ProdukController extends Controller
      */
     public function all(Request $request)
     {
-        $produks = Produk::select('id','nama','harga_jual','deskripsi','foto')->where(function($query) use ($request){
+        $produks = Produk::select('id','nama','harga_jual','deskripsi','foto','warna','stok')->where(function($query) use ($request){
 					$query->orwhere('nama', 'LIKE', '%' . $request->search . '%')
 					->orwhere('harga_jual', 'LIKE', '%' . $request->search . '%')
 					->orwhere('deskripsi', 'LIKE', '%' . $request->search . '%');
@@ -31,6 +31,8 @@ class ProdukController extends Controller
                     'nama' => $this->namaProduk($produk->nama),
                     'harga_jual' => number_format($produk->harga_jual,0,',','.'),
                     'deskripsi' => $produk->deskripsi,
+                    'stok' => $produk->stok,
+                    'warna' => $produk->warna,
                     'foto' => $foto,
                 ];
         }
@@ -40,7 +42,7 @@ class ProdukController extends Controller
 
     public function index(Request $request)
     {
-        $produks = Produk::select('id','nama','harga_jual','deskripsi')->where(function($query) use ($request){
+        $produks = Produk::select('id','nama','harga_jual','deskripsi','warna','stok')->where(function($query) use ($request){
 					$query->orwhere('nama', 'LIKE', '%' . $request->search . '%')
 					->orwhere('harga_jual', 'LIKE', '%' . $request->search . '%')
 					->orwhere('deskripsi', 'LIKE', '%' . $request->search . '%');
@@ -52,6 +54,8 @@ class ProdukController extends Controller
                     'id' => $produk->id,
                     'nama' => title_case($produk->nama),
                     'harga_jual' => number_format($produk->harga_jual,0,',','.'),
+                    'warna' => $produk->warna,
+                    'stok' => $produk->stok,
                     'deskripsi' => $produk->deskripsi,
                 ];
         }
@@ -71,13 +75,17 @@ class ProdukController extends Controller
             'nama' => 'required|string',
             'harga_jual' => 'required|numeric|digits_between:1,11',
             'deskripsi' => 'required',
+            'stok' => 'required|numeric',
+            'warna' => 'required',
             'foto' => 'image|max:3072'
         ]);  
 
         $produk = Produk::create([
             'nama' => $request->nama,
             'harga_jual' => $request->harga_jual,
-            'deskripsi' => $request->deskripsi
+            'deskripsi' => $request->deskripsi,
+            'stok' => $request->stok,
+            'warna' => $request->warna
         ]);
 
         if($request->hasFile('foto')){
@@ -101,7 +109,7 @@ class ProdukController extends Controller
      */
     public function show($id)
     {
-       $produk = Produk::select('id','nama','harga_jual','deskripsi','foto')->whereId($id)->first();
+       $produk = Produk::select('id','nama','harga_jual','deskripsi','foto','warna','stok')->whereId($id)->first();
       
        $produk->foto ? $foto = url('image_produks/'.$produk->foto) : $foto = $produk->foto;
 
@@ -109,6 +117,8 @@ class ProdukController extends Controller
             'id' => $produk->id,
             'nama' => $produk->nama,
             'harga_jual' => $produk->harga_jual,
+            'stok' => $produk->stok,
+            'warna' => $produk->warna,
             'deskripsi' => $produk->deskripsi,
             'previewFoto' => $foto
        ],200);
@@ -126,6 +136,8 @@ class ProdukController extends Controller
         $this->validate($request,[
             'nama' => 'required|string',
             'harga_jual' => 'required|numeric|digits_between:1,11',
+            'stok' => 'required',
+            'warna' => 'required',
             'deskripsi' => 'required|string|min:6',
             'foto' => 'image|max:3072'
         ]);  
@@ -135,6 +147,8 @@ class ProdukController extends Controller
         $produk->update([
             'nama' => $request->nama,
             'harga_jual' => $request->harga_jual,
+            'stok' => $request->stok,
+            'warna' => $request->warna,
             'deskripsi' => $request->deskripsi
         ]);
 

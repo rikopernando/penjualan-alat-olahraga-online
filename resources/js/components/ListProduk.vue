@@ -4,18 +4,22 @@
     <Loading v-if="loading" />
     <sui-card-group :items-per-row="4" v-else>
       <sui-card v-for="produk , index in dataProduks" :key="index">
-        <sui-image :src="produk.foto"/>
-        <sui-card-content extra>
-					<h6 is="sui-header" color="grey">{{produk.nama}}</h6>
-          <p>Rp. {{produk.harga_jual}}</p>
-          <sui-button secondary fluid v-on:click="handleClick(produk)" v-if="auth.is_member">Beli Sekarang</sui-button>
-					<div class="ui fluid secondary button" data-tooltip="Silakan login sebagai pelanggan untuk belanja" data-position="top center" v-else-if="auth.is_owner || auth.is_admin">
-						Belanja Sekarang
-					</div>
-          <router-link :to="{name: 'login'}" class="ui fluid secondary button" v-if="!auth.loggedIn">
-						Belanja Sekarang
-          </router-link>
-        </sui-card-content>
+				<a class="ui card">
+						<a href="https://google.com" class="ui medium image">
+							<sui-image :src="produk.foto"/>
+						</a>
+						<sui-card-content extra>
+							<h6 is="sui-header" color="grey">{{produk.nama}}</h6>
+							<p>Rp. {{produk.harga_jual}}</p>
+							<sui-button secondary fluid v-on:click="handleClick(produk)" v-if="auth.is_member">Beli Sekarang</sui-button>
+							<div class="ui fluid secondary button" data-tooltip="Silakan login sebagai pelanggan untuk belanja" data-position="top center" v-else-if="auth.is_owner || auth.is_admin">
+								Belanja Sekarang
+							</div>
+							<router-link :to="{name: 'login'}" class="ui fluid secondary button" v-if="!auth.loggedIn">
+								Belanja Sekarang
+							</router-link>
+						</sui-card-content>
+	       </a>	
       </sui-card>
     </sui-card-group>
     <pagination :data="produks" v-on:pagination-change-page="getProduk" :limit="4"></pagination>

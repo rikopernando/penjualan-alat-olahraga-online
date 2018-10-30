@@ -23,6 +23,26 @@
               :errors="errors.harga_jual"
             />
             <TextInput 
+              label="Stok Produk"
+              type="number"
+              id="stok"
+              placeholder="Stok Produk"
+              v-model="produks.stok"
+              :errors="errors.stok"
+            />
+            <SelectInput
+              label="Warna"
+              :options="warna"
+              :placeholder="{
+                placeholder: 'Pilih Warna',
+								delimiter: ',',
+								maxItems: null,
+              }"
+              v-model="produks.warna"
+              :errors="errors.warna"
+              :loading="false"
+            />
+            <TextInput 
               label="Deskripsi Produk"
               type="textarea"
               id="deskripsi"
@@ -52,17 +72,46 @@
     import Header from '../../components/Header'
     import Breadcrumb from '../../components/Breadcrumb'
     import TextInput from '../../components/TextInput'
+    import SelectInput from '../../components/SelectInput'
 
     export default {
         data: () => ({
           breadcrumb: [{value: 'index',label:'Home'}, {value: 'produk',label:'Produk'}, {value: 'produk_edit',label:'Edit Produk'}],
           loading: false,
           errors: [],
+          warna: [
+            {
+              id: 'Biru',
+              name: 'Biru'
+            },
+            {
+              id: 'Hijau',
+              name: 'Hijau'
+            },
+            {
+              id: 'Hitam',
+              name: 'Hitam'
+            },
+            {
+              id: 'Kuning',
+              name: 'Kuning'
+            },
+            {
+              id: 'Merah',
+              name: 'Merah'
+            },
+            {
+              id: 'Putih',
+              name: 'Putih'
+            },
+          ],
           message: '',
           produks: {
             nama: '',
             harga_jual: '',
             foto: '',
+            warna: '',
+            stok: 0,
             deskripsi: '',
           },
           previewFoto: ''
@@ -75,10 +124,10 @@
           'produks.foto':function(){
              const app = this
              app.createImage()
-          }
+          },
         },
         components:{
-          Header, Breadcrumb, TextInput
+          Header, Breadcrumb, TextInput, SelectInput
         },
         methods: {
           createImage(){
@@ -101,6 +150,8 @@
               app.produks.nama = data.nama
               app.produks.harga_jual = data.harga_jual
               app.produks.deskripsi = data.deskripsi
+              app.produks.stok = data.stok
+              app.produks.warna = data.warna.split(",")
               app.previewFoto = data.previewFoto
             })
             .catch((err) => {
@@ -127,7 +178,7 @@
             })
           },
           inputData(){
-            const { nama, harga_jual, deskripsi } = this.produks
+            const { nama, harga_jual, deskripsi, warna, stok } = this.produks
             const data = new FormData()
 						if (document.getElementById('foto').files[0] != undefined) {
 						 data.append('foto', document.getElementById('foto').files[0]);
@@ -135,6 +186,8 @@
 						data.append('nama',nama)
 						data.append('harga_jual',harga_jual)
 						data.append('deskripsi',deskripsi)
+						data.append('stok',stok)
+						data.append('warna',warna)
 
             return data
           },
