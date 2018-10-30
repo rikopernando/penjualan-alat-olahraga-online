@@ -34,39 +34,13 @@
               />
             </div>
             <TextInput 
-              label="Alamat Pengiriman"
+              label="Alamat KTP Lengkap"
               type="text"
               id="alamat"
-              placeholder="Alamat Pengiriman"
+              placeholder="Alamat KTP Lengkap"
               v-model="pesanans.alamat"
               :errors="errors.alamat"
             />
-            <div class="three fields">
-              <SelectInput
-                label="Kabupaten / Kota"
-                :options="kabupaten"
-                :placeholder="{placeholder: 'Cari Kabupaten / Kota'}"
-                v-model="pesanans.kabupaten"
-                :errors="errors.kabupaten"
-								:loading="this.$store.state.lokasi.load_kabupaten"
-              />
-              <SelectInput
-                label="Kecamatan"
-                :options="kecamatan"
-                :placeholder="{placeholder: 'Cari Kecamatan'}"
-                v-model="pesanans.kecamatan"
-                :errors="errors.kecamatan"
-								:loading="this.$store.state.lokasi.load_kecamatan"
-              />
-              <SelectInput
-                label="Kelurahan"
-                :options="kelurahan"
-                :placeholder="{placeholder: 'Cari Kelurahan'}"
-                v-model="pesanans.kelurahan"
-                :errors="errors.kelurahan"
-								:loading="this.$store.state.lokasi.load_kelurahan"
-              />
-            </div>
             <TextInput 
               label="Catatan"
               type="textarea"
@@ -158,10 +132,6 @@
         email: '',
         no_telp: '',
         total : 0,
-        provinsi: '',
-        kabupaten: '',
-        kecamatan: '',
-        kelurahan: '',
         catatan: '',
         bank: '',
         no_rek: '',
@@ -172,21 +142,8 @@
       const app = this
       app.setProfile()
       app.loadBank()
-			app.$store.dispatch('lokasi/LOAD_WILAYAH',{
-				type : "kabupaten",
-				id : 18,
-			}) 
     },
     computed : mapState ({
-       kabupaten() {
-        return this.$store.state.lokasi.kabupaten
-       },
-       kecamatan() {
-        return this.$store.state.lokasi.kecamatan
-       },
-       kelurahan() {
-        return this.$store.state.lokasi.kelurahan
-       },
        profile() {
         return this.$store.state.user.profile
        },
@@ -215,14 +172,6 @@
        }
     }),
     watch: {
-      'pesanans.kabupaten': function(){
-         const app = this
-         app.pesanans.kabupaten && app.loadWilayah("kecamatan",app.pesanans.kabupaten)
-      },
-      'pesanans.kecamatan': function(){
-         const app = this
-         app.pesanans.kecamatan && app.loadWilayah("kelurahan",app.pesanans.kecamatan)
-      },
       'pesanans.bank': function(){
          const app = this
          app.setBankTransfer()
@@ -249,13 +198,6 @@
           console.log(err)
           alert("Gagal memuat Bank")
         })
-      },
-      loadWilayah(type,id){
-         const app = this
-         app.$store.dispatch('lokasi/LOAD_WILAYAH',{
-           type : type,
-           id : id,
-        }) 
       },
       setBankTransfer(){
         const app = this
@@ -312,12 +254,20 @@
       },
       getKeranjang(page = 1){
         const app = this
-        app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: page, search:app.search})
+        app.$store.dispatch('keranjang/LOAD_KERANJANG',{
+          page: page,
+          search: app.search,
+          pelanggan: app.profile.id
+        })
       },
       handleDelete(id){
         const app = this
         axios.delete(`api/keranjangs/${id}`).then((resp) => {
-          app.$store.dispatch('keranjang/LOAD_KERANJANG',{page: 1, search:app.search})
+          app.$store.dispatch('keranjang/LOAD_KERANJANG',{
+            page: 1,
+            search: app.search,
+            pelanggan: app.profile.id
+          })
           app.alert("Berhasil menghapus data keranjang","success",1000)
         })
         .catch((err) => {

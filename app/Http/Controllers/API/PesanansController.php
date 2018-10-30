@@ -50,11 +50,8 @@ class PesanansController extends Controller
         $this->validate($request,[
             'nama' => 'required|string',
             'alamat' => 'required',
-            'email' => 'required|string|email|max:255|unique:users,id,'.$pelanggan,
+            'email' => 'required|string|email|max:255|unique:users,email,'.$pelanggan,
             'no_telp' => 'required',
-            'kabupaten' => 'required',
-            'kecamatan' => 'required',
-            'kelurahan' => 'required',
             'bank' => 'required',
             'atas_nama' => 'required',
             'no_rek' => 'required'
@@ -63,19 +60,12 @@ class PesanansController extends Controller
         try {
 
             $user = User::find($pelanggan);
-            $user_update = [
+            $user->update([
                 'name' => $request->nama,
                 'no_telp' => $request->no_telp,
                 'alamat' => $request->alamat,
-                'provinsi' => 18,
-                'kabupaten' => $request->kabupaten,
-                'kecamatan' => $request->kecamatan,
-                'kelurahan' => $request->kelurahan
-            ];
-            if($user->email != $request->email){
-                $user_update["email"] = $request->email;
-            }
-            $user->update($user_update);
+                'email' => $request->email,
+            ]);
 
             if(!$user){
                 DB::rollBack();

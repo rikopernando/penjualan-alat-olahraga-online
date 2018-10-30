@@ -4,7 +4,7 @@
       <sui-container>
             <router-link :to="{name: 'index'}"
               class="header item">
-              Project Name
+              Satria Shop
             </router-link>
 
             <router-link :to="{name: 'index'}" class="item" v-if="this.$store.state.user.loggedIn">

@@ -33,7 +33,7 @@ th,td{
 			<div class="col-sm-2"></div><!--penutup colsm2-->
 			<div class="col-sm-8">
 				<center> 
-                    <h3> <b>Toko kita </b> </h3> 
+                    <h3> <b>Satria Shop</b> </h3> 
 					<p>
                         Bandar Lampung
                         <br>
