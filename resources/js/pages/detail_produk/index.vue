@@ -24,6 +24,7 @@
 									selection
 									v-model="pesanans.warna"
 								/>
+                <p style="color :red; font-style:italic;">Silakan pilih warna terlebih dahulu</p>
               </sui-grid-column>
               <sui-grid-column :width="5">
 								<br />
@@ -35,7 +36,7 @@
 								<sui-button attached="right" icon="plus" v-on:click="addProduk()"/>
                 <p style="color :red; font-style:italic;margin-top:25px;">Sisa Produk : {{produks.stok}}</p>
 								<div style="margin-top:25px;">
-										<sui-button primary>Beli Sekarang</sui-button>
+										<sui-button primary v-on:click="beliSekarang()">Beli Sekarang</sui-button>
 										<sui-button secondary>Tambah ke Keranjang</sui-button>
 							  </div>	
               </sui-grid-column>
