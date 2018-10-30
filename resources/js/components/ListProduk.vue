@@ -5,9 +5,9 @@
     <sui-card-group :items-per-row="4" v-else>
       <sui-card v-for="produk , index in dataProduks" :key="index">
 				<a class="ui card">
-						<a href="https://google.com" class="ui medium image">
+            <router-link :to="{name: 'detail_produk', params: {id: produk.id}}" class="ui medium image"> 
 							<sui-image :src="produk.foto"/>
-						</a>
+            </router-link>
 						<sui-card-content extra>
 							<h6 is="sui-header" color="grey">{{produk.nama}}</h6>
 							<p>Rp. {{produk.harga_jual}}</p>
