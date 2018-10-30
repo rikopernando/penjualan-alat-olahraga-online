@@ -151,7 +151,7 @@
               app.produks.harga_jual = data.harga_jual
               app.produks.deskripsi = data.deskripsi
               app.produks.stok = data.stok
-              app.produks.warna = data.warna.split(",")
+              app.produks.warna = data.warna ? data.warna.split(",") : null
               app.previewFoto = data.previewFoto
             })
             .catch((err) => {

@@ -17,6 +17,7 @@ import BankCreate from '../pages/bank/create'
 import BankEdit from '../pages/bank/edit'
 import Profil from '../pages/profil'
 import DetailPesananSaya from '../pages/profil/detail_pesanan'
+import DetailProduk from '../pages/detail_produk'
 
 const routes = [
       {
@@ -167,6 +168,14 @@ const routes = [
         path: '/pesanan-saya/:id',
         name: 'detail_pesanan_saya',
         component: DetailPesananSaya,
+        meta: {
+            requiresAuth: true,
+        }
+      },
+      {
+        path: '/detail-produk/:id',
+        name: 'detail_produk',
+        component: DetailProduk,
         meta: {
             requiresAuth: true,
         }
