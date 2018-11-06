@@ -11,6 +11,10 @@
                Home
             </router-link>
 
+            <router-link :to="{name: 'laporan_penjualan'}" class="item"  v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
+               Pesanan Penjualan
+            </router-link>
+
             <sui-dropdown 
               text="Master Data"
               item class="simple"
@@ -33,11 +37,12 @@
               item class="simple"
               v-if="this.$store.state.user.is_admin || this.$store.state.user.is_owner">
                   <sui-dropdown-menu>
-                    <router-link :to="{name: 'laporan_penjualan'}" class="item"> 
-                      Penjualan
+                    <router-link :to="{name: 'laporan_kas'}" class="item"> 
+                      Laporan Kas
                     </router-link>
                   </sui-dropdown-menu>
             </sui-dropdown>
+
       	<sui-menu-menu position="right">
 
               <router-link :to="{name: 'login'}" 
