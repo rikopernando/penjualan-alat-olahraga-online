@@ -115,6 +115,8 @@
       app.$store.state.user.is_member 
         ? app.items = ["Dashboard","Pesanan Saya","Ubah Password"]
         : app.items = ["Dashboard","Ubah Password"]
+
+      app.cekPesanan(app.$route.name)
     },
     components:{
       Header, Breadcrumb, DashboardProfil, TableHeader, TableBody, TableKosong, Loading, TextInput
@@ -139,11 +141,18 @@
         const app = this
 				app.active = name;
         name == 'Pesanan Saya' && app.getPesanan() 
-			},
+      },
+      cekPesanan(data) {
+        const app = this
+        if(data == "profile") {
+          app.getPesanan()
+        }
+      },
       getPesanan(page = 1){
         const app = this
         const pelanggan = app.profile.id
         axios.get(`api/pesanan-saya?page=${page}&search=${app.search}&pelanggan=${pelanggan}`).then((resp) => {
+          app.active = "Pesanan Saya"
           app.pesanans = resp.data
           app.dataPesanans = resp.data.data
           app.searchLoading = false

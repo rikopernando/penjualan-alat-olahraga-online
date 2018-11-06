@@ -9,6 +9,11 @@
             <div class="col-md-7">
               <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
               <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
+
+              <router-link :to="{name: 'profile'}" class="ui black icon right labeled button">
+                <sui-icon name="shopping basket" />
+                Pesanan Saya
+              </router-link>
             </div>
             <div class="col-md-3">
               <sui-segment>

@@ -165,6 +165,14 @@ const routes = [
         }
       },
       {
+        path: '/profile',
+        name: 'profile',
+        component: Profil,
+        meta: {
+            requiresAuth: true,
+        }
+      },
+      {
         path: '/pesanan-saya/:id',
         name: 'detail_pesanan_saya',
         component: DetailPesananSaya,
