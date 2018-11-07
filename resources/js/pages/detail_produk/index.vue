@@ -12,6 +12,35 @@
                 <sui-card class="black">
                  <sui-image :src="previewFoto" bordered/>
                 </sui-card>
+
+                <sui-comment-group>
+                  <h3 is="sui-header" dividing>Comments</h3>
+                  
+                  <form id="form-error" v-bind:class="[loadingForm ? 'ui loading form' : 'ui form']">
+                    <textarea 
+                      style="border-radius: 5px; width: 70%; height: 38px; margin-top: 0px; margin-bottom: 0px;"
+                      placeholder="Typing Here.." 
+                      rows="3"
+                      v-model="comments.komentar">
+                    </textarea>	
+                    
+                    <sui-button type="button" color="black" content="Submit" v-on:click="saveForm()" v-if="!loadingForm"/>
+                  </form>
+
+                  <sui-comment v-for="data , index in dataComments">
+                    <sui-comment-avatar :src="commentFoto" />
+                    <sui-comment-content style="text-align: left">
+                      <a is="sui-comment-author">{{data.pelanggan.name}}</a>
+                      <sui-comment-metadata>
+                        <div>{{data.created_at}}</div>
+                      </sui-comment-metadata>
+                      <sui-comment-text>
+                        <p>{{data.komentar}}</p>
+                      </sui-comment-text>
+                    </sui-comment-content>                    
+                  </sui-comment>
+                </sui-comment-group>
+                
               </sui-grid-column>
               <sui-grid-column :width="5">
                 <h4 class="ui dividing header">{{produks.nama}}</h4>
@@ -62,16 +91,30 @@
           search: '',
           produks: {},
           previewFoto: null,
+          commentFoto: window.location.origin+(window.location.pathname)+"images/default_profil.jpg",
           loading: true,
+          loadingForm: false,
           pesanans: {
               warna: null,
               jumlah_produk: 1,	
-          }
+          },
+          comments: {
+            pelanggan: '',
+            komentar: ''
+          },
+          dataComments: []
         }),
         mounted(){
           const app = this
           app.findProduk(app.$route.params.id)
+          app.setProfile()
+          app.getComments()
         },
+        computed : mapState ({
+          profile() {
+            return this.$store.state.user.profile
+          }
+        }),
         watch : {
           'pesanans.jumlah_produk' : function(){
              const app = this
@@ -94,6 +137,39 @@
 					},
 				},
         methods:{
+          saveForm() {
+            const app = this
+            app.loadingForm = true
+            axios.post('api/comments',app.comments).then((resp) => {
+              app.loadingForm = false
+              app.getComments()
+              app.comments.komentar = ""
+            })
+            .catch((err) => {
+              console.log(err)
+              const app = this
+              app.loadingForm = false
+            })
+          },
+          setProfile(){
+            const app = this
+            const { id } = app.profile
+            app.comments.pelanggan = id
+          },
+          getComments() {
+            const app = this
+            axios.get(`api/comments/all`).then((resp) => {
+              const { data } = resp
+              app.dataComments = data
+              app.loading = false
+              console.log(app.dataComments)
+            })
+            .catch((err) => {
+              console.log(err)
+              app.loading = false
+              alert(err)
+            })
+          },
           findProduk(id){
             const app = this
             axios.get(`api/produks/${id}`).then((resp) => {
