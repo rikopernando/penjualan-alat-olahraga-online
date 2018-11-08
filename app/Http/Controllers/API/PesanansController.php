@@ -110,6 +110,7 @@ class PesanansController extends Controller
                         'pesanan_id' => $pesanan->id,
                         'produk_id' => $data->produk_id,
                         'jumlah' => $data->jumlah,
+                        'warna' => $data->warna,
                         'harga_jual' => $data->harga_jual,
                         'subtotal' => $data->subtotal
                     ]);

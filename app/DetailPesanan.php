@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPesanan extends Model
 {
     protected $fillable = [
-        'pesanan_id', 'produk_id', 'jumlah', 'harga_jual','subtotal'
+        'pesanan_id', 'produk_id', 'jumlah', 'harga_jual','subtotal', 'warna'
     ];
 
     public function produk()
