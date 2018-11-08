@@ -14,9 +14,9 @@ class KomentarController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function all()
+    public function all($id)
     {
-        return KomentarProduk::with(['pelanggan'])->get();
+        return KomentarProduk::with(['pelanggan'])->where('produk_id', $id)->get();
     }
 
     public function index()
@@ -48,6 +48,7 @@ class KomentarController extends Controller
 
         $komentar = KomentarProduk::create([
             'pelanggan_id' => $request->pelanggan,
+            'produk_id' => $request->produk_id,
             'komentar' => $request->komentar
         ]);
 

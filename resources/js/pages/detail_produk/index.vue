@@ -100,7 +100,8 @@
           },
           comments: {
             pelanggan: '',
-            komentar: ''
+            produk_id: '',
+            komentar: '',
           },
           dataComments: []
         }),
@@ -154,11 +155,14 @@
           setProfile(){
             const app = this
             const { id } = app.profile
+            const produk = app.$route.params.id
             app.comments.pelanggan = id
+            app.comments.produk_id = produk
           },
           getComments() {
             const app = this
-            axios.get(`api/comments/all`).then((resp) => {
+            const id = app.$route.params.id
+            axios.get(`api/comments/${id}`).then((resp) => {
               const { data } = resp
               app.dataComments = data
               app.loading = false

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class KomentarProduk extends Model
 {
     protected $fillable = [
-        'pelanggan_id', 'komentar'
+        'pelanggan_id', 'produk_id', 'komentar'
     ];
 
     public function pelanggan()

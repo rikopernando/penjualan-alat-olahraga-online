@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('produks/all','API\ProdukController@all');
-Route::get('comments/all','API\KomentarController@all');
+Route::get('comments/{id}','API\KomentarController@all');
 
 Route::middleware('auth:api','throttle:200,5')->group(function(){
 
