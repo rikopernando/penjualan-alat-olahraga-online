@@ -70,7 +70,6 @@
     <div id="app">
         <router-view></router-view>
     </div>
-    <script src="{{ asset('js/app.js?v=25')}}" type="text/javascript"></script>
     <script src="{{ asset('js/app.js?v=26')}}" type="text/javascript"></script>
 </body>
 </html>
