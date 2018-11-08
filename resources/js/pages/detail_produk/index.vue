@@ -65,8 +65,7 @@
 								<sui-button attached="right" icon="plus" v-on:click="addProduk()"/>
                 <p style="color :red; font-style:italic;margin-top:25px;">Sisa Produk : {{produks.stok}}</p>
 								<div style="margin-top:25px;">
-										<sui-button primary v-on:click="beliSekarang()">Beli Sekarang</sui-button>
-										<sui-button secondary>Tambah ke Keranjang</sui-button>
+										<sui-button primary v-on:click="beliSekarang()">Tambah ke Keranjang</sui-button>
 							  </div>	
               </sui-grid-column>
             </sui-grid-row>
@@ -138,6 +137,25 @@
 					},
 				},
         methods:{
+          beliSekarang(){
+            const app = this
+            const pelanggan = app.$store.state.user.profile.id 
+            const produk = app.$route.params.id
+            const jumlah = app.pesanans.jumlah_produk
+            const warna = app.pesanans.warna
+
+            axios.post('api/keranjangs',{produk:produk, jumlah:jumlah, pelanggan:pelanggan, warna:warna}).then((resp) => {
+              const { jumlah } = resp.data
+              jumlah > 0 && app.$store.commit('keranjang/SET_JUMLAH')
+              app.alert("Produk dimasukan ke Keranjang Belanja")
+              app.loading = false
+            })
+            .catch((err) => {
+              app.loading = false
+              alert(err)
+              console.log(err)
+            })
+          },
           saveForm() {
             const app = this
             app.loadingForm = true
