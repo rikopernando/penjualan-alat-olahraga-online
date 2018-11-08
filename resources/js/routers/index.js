@@ -11,6 +11,7 @@ import ProdukEdit from '../pages/produk/edit'
 import Keranjang from '../pages/keranjang'
 import Checkout from '../pages/checkout'
 import LaporanPenjualan from '../pages/laporan_penjualan'
+import LaporanKas from '../pages/laporan_kas/index.vue'
 import LaporanPenjualanDetail from '../pages/laporan_penjualan/detail'
 import BankIndex from '../pages/bank'
 import BankCreate from '../pages/bank/create'
@@ -132,6 +133,15 @@ const routes = [
         }
       },
       {
+        path: '/laporan-kas',
+        name: 'laporan_kas',
+        component: LaporanKas,
+        meta: {
+            requiresAuth: true,
+            is_owner: true
+        }
+      },
+      {
         path: '/laporan-penjualan/detail/:id',
         name: 'laporan_penjualan_detail',
         component: LaporanPenjualanDetail,
@@ -159,6 +169,14 @@ const routes = [
       {
         path: '/profil',
         name: 'profil',
+        component: Profil,
+        meta: {
+            requiresAuth: true,
+        }
+      },
+      {
+        path: '/profile',
+        name: 'profile',
         component: Profil,
         meta: {
             requiresAuth: true,

@@ -2,19 +2,32 @@
     <div>
       <Header />
         <div class="container" style="margin-top: 70px;">
-			    <Breadcrumb active="laporan_penjualan" :breadcrumb="breadcrumb" />
+			    <Breadcrumb active="laporan_kas" :breadcrumb="breadcrumb" />
           <br />
           <br />
           <div class="row">
-            <div class="col-md-3">
-              <sui-input placeholder="Search..." icon="search" v-model="search" loading v-if="searchLoading" />
-              <sui-input placeholder="Search..." icon="search" v-model="search" v-else />
+            <div class="col-md-12" style="margin-left: 5px">
+                <form class="ui form">
+                  <div class="four fields">
+                    <Datepicker style="margin-right: 10px;" placeholder="Dari Tanggal" v-model="dari_tanggal"></Datepicker>
+                    <Datepicker style="margin-right: 10px;" placeholder="Sampai Tanggal" v-model="sampai_tanggal"></Datepicker>
+                    <SelectInput
+                      label=""
+                      :options="bank"
+                      :placeholder="{placeholder: 'Pilih Bank'}"
+                      v-model="bankId"
+                      :loading="false"
+                    />
+                    <sui-button type="button" color="black" content="Filter" v-on:click="saveForm()"/>
+                    <sui-button type="button" color="black" content="Cetak" v-on:click="cetak()"/>
+                  </div>
+                </form>
             </div>
           </div>
           <Loading v-if="loading"/>
           <sui-table striped v-else>
             <TableHeader :header="tableHeader" />
-            <TableBody :data="dataPesanans" labelEdit="Detail" edit="laporan_penjualan_detail" v-on:delete="handleDelete" v-if="dataPesanans.length"/>
+            <TableBody :data="dataPesanans" labelEdit="" edit="" hapus="0" v-on:delete="handleDelete" v-if="dataPesanans.length"/>
             <TableKosong colspan="6" :text="message_table_kosong" v-else/>
           </sui-table>
 					<pagination :data="pesanans" v-on:pagination-change-page="saveForm" :limit="4" v-if="dari_tanggal && sampai_tanggal"></pagination>
@@ -32,13 +45,14 @@
     import TableKosong from '../../components/TableKosong'
     import Loading from '../../components/Loading'
     import TextInput from '../../components/TextInput'
+    import SelectInput from '../../components/SelectInput'
     import Datepicker from 'vuejs-datepicker'
 
 
     export default {
         data: () => ({
-          breadcrumb: [{value: 'index',label:'Home'}, {value: 'laporan_penjualan',label:'Pesanan Penjualan'}],
-          tableHeader: ['ID Order','Pelanggan','Waktu','Total','Status','Detail','Hapus'],
+          breadcrumb: [{value: 'index',label:'Home'}, {value: 'laporan_kas',label:'Laporan Kas'}],
+          tableHeader: ['ID Order','Pelanggan','Waktu','Total','Status'],
           loading: true,
           search: '',
           searchLoading: '',
@@ -46,14 +60,17 @@
           dataPesanans: [],
           message_table_kosong: 'Data Penjualan Kosong',
           dari_tanggal: '',
-          sampai_tanggal: ''
+          sampai_tanggal: '',
+          bank: [],
+          bankId: ''
         }),
         components:{
-          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading, TextInput, Datepicker
+          Header, Breadcrumb, TableHeader, TableBody, TableKosong, Loading, TextInput, Datepicker, SelectInput
         },
         mounted(){
           const app = this
-          app.getPesanans()
+          app.loadBank()
+          app.loading = false
         },
         watch: {
           search(){
@@ -65,6 +82,16 @@
           }
         },
         methods: {
+          loadBank(){
+            const app = this
+            axios.get('api/banks/all').then((resp) => {
+              app.bank = resp.data
+            })
+            .catch((err) => {
+              console.log(err)
+              alert("Gagal memuat Bank")
+            })
+          },
           getPesanans(page = 1){
             const app = this
             axios.get(`api/pesanans?page=${page}&search=${app.search}`).then((resp) => {
@@ -99,11 +126,13 @@
             if(app.validate()){
                 const data = { 
                     dari_tanggal: app.dateFormat(app.dari_tanggal),
-                    sampai_tanggal: app.dateFormat(app.sampai_tanggal)
+                    sampai_tanggal: app.dateFormat(app.sampai_tanggal),
+                    bank: app.bankId
                 }
                 if(!app.search) app.loading = true
                 axios.post(`api/pesanans/filter?page=${page}&search=${app.search}`,data)
                 .then((resp) => {
+                  console.log(resp.data.data)
                   app.pesanans = resp.data
                   app.dataPesanans = resp.data.data
                   app.searchLoading = false
@@ -124,7 +153,8 @@
             if(app.validate()){
                 const dari_tanggal = app.dateFormat(app.dari_tanggal)
                 const sampai_tanggal = app.dateFormat(app.sampai_tanggal)
-                window.open(`pesanans-cetak-penjualan?dari_tanggal=${dari_tanggal}&sampai_tanggal=${sampai_tanggal}`,'_blank');
+                const bank = app.bankId
+                window.open(`pesanans-cetak-penjualan?dari_tanggal=${dari_tanggal}&sampai_tanggal=${sampai_tanggal}&bank=${bank}`,'_blank');
             }
           },
           validate(){
@@ -134,6 +164,9 @@
               return false
             }else if(!app.sampai_tanggal){
               app.alert("Sampai Tanggal harus disi","error",5000) 
+              return false
+            }else if(!app.bankId){
+              app.alert("Bank harus dipilih","error",5000) 
               return false
             }
             return true

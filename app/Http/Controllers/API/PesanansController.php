@@ -244,8 +244,18 @@ class PesanansController extends Controller
 
         $pesanans = Pesanan::QueryPesanan($request)
 		   	->where(DB::raw('DATE(pesanans.created_at)'), '>=', $request->dari_tanggal)
-			->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)
+            ->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)
+            ->where('status_pesanan', 3)
+            ->where('kas_id', $request->bank)
             ->orderBy('pesanans.id','desc')->paginate(10);
+
+        $totalPesanan = Pesanan::select([DB::raw('SUM(total) as total')])
+            ->where(DB::raw('DATE(pesanans.created_at)'), '>=', $request->dari_tanggal)
+            ->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)
+            ->where('status_pesanan', 3)
+            ->where('kas_id', $request->bank)
+            ->first()->total;
+
         $data = [];
 
         foreach($pesanans as $pesanan){
@@ -258,6 +268,14 @@ class PesanansController extends Controller
                 ];
         }
 
+        $data[] = [
+            'id' => "TOTAL AKHIR",
+            'pelanggan' => "",
+            'waktu' => "",
+            'total' => number_format($totalPesanan,0,',','.'),
+            'status_pesanan' => "3",
+        ];
+
         return app(PaginateController::class)->getPagination($pesanans, $data, '/api/pesanans-filter');
     }
 
@@ -266,6 +284,8 @@ class PesanansController extends Controller
         $pesanans = Pesanan::QueryPesanan($request)
 		   	->where(DB::raw('DATE(pesanans.created_at)'), '>=', $request->dari_tanggal)
 			->where(DB::raw('DATE(pesanans.created_at)'), '<=', $request->sampai_tanggal)
+            ->where('status_pesanan', 3)
+            ->where('kas_id', $request->bank)
             ->orderBy('pesanans.id','desc')->get();
         $data = [];
         $total = 0;

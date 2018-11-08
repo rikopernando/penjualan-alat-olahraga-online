@@ -87,7 +87,7 @@ th,td{
 							</div>
 					</body>
 					<!--   Core JS Files   -->
-					<script src="{{ asset('js/app.js?v=1.51')}}" type="text/javascript"></script>
+					<script src="{{ asset('js/app.js?v=26')}}" type="text/javascript"></script>
 
 					<script>
 						$(document).ready(function(){
