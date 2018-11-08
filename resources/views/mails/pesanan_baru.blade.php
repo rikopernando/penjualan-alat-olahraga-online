@@ -321,7 +321,7 @@
                                               </table>
                                               <hr>
 
-                                              <p>Anda akan menerima email konfirmasi pembayaran , apabila anda telah melunasi pembayaran.</p>
+                                              <!-- <p>Anda akan menerima email konfirmasi pembayaran , apabila anda telah melunasi pembayaran.</p> -->
                                               <p>Pembayaran dapat dilakukan ke Rekening Bank <b>{{strtoupper($pesanan->bank->name)}} ({{ $pesanan->bank->no_rek }})</b> a/n <b> {{ $pesanan->bank->atas_nama }}</b>.</p>
 
                                                   <p>Pesanan Anda akan dikirimkan ke: <b>{{ $pesanan->pelanggan->name }}</b> </p>
@@ -341,9 +341,6 @@
                                   </tr>
                                 </tbody>
                               </table>
-
-                            {{--<p>This is a really simple email template. Its sole purpose is to get the recipient to click the button with no distractions.</p>--}}
-                            {{--<p>Good luck! Hope it works.</p>--}}
                             </td>
                         </tr>
                         </table>
@@ -358,7 +355,7 @@
                     <table border="0" cellpadding="0" cellspacing="0">
                         <tr>
                             <td class="content-block powered-by">
-                                Powered by <a href="https://andaglos.id/">PT Andaglos Global Teknologi</a>.
+                                Powered by Satria Shop.
                             </td>
                         </tr>
                     </table>

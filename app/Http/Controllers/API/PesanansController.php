@@ -10,6 +10,7 @@ use App\Pesanan;
 use App\DetailPesanan;
 use App\KeranjangBelanja;
 use App\User;
+use App\Produk;
 
 class PesanansController extends Controller
 {
@@ -112,6 +113,14 @@ class PesanansController extends Controller
                         'harga_jual' => $data->harga_jual,
                         'subtotal' => $data->subtotal
                     ]);
+                    
+                    $produk = Produk::find($data->produk_id);
+                    $stokSekarang = intval($produk->stok) - intval($data->jumlah);
+
+                    $produk->update([
+                        'stok' => $stokSekarang,
+                    ]);
+
                     if(!$detail_pesanan){
 		                DB::rollBack();
                         return response()->json([
@@ -129,9 +138,9 @@ class PesanansController extends Controller
             }
 
           $keranjang->delete();
-          /*if(!$pesanan->sendMailPesananBaru()){
+          if(!$pesanan->sendMailPesananBaru($request)){
             DB::rollBack();
-          }*/
+          }
           DB::commit();
           return response()->json([
             'message' => 'Transaksi Berhasil',

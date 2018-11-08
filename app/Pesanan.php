@@ -65,24 +65,28 @@ class Pesanan extends Model
         return $query;
     }
 
-    public function sendMailPesananBaru(){
+    public function sendMailPesananBaru($request){
 
         $pesanan = $this;
         $detail_pesanan = DetailPesanan::with('produk')->where('pesanan_id',$pesanan->id)->get();
 
-        Mail::send('mails.pesanan_baru', compact('pesanan','detail_pesanan'), function ($message) use ($pesanan) {
-              $message->from('aqiqahlampung@muliajayaindofarm.com');
-              $message->to("rikopernandoriko96@gmail.com");
+        Mail::send('mails.pesanan_baru', compact('pesanan','detail_pesanan'), function ($message) use ($pesanan, $request) {
+              $message->from('nicofachreza@gmail.com');
+              $message->to($request->email);
               $message->subject('Pesanan Anda Telah Kami Terima');
         });
 
+        return true;
+
+        /*
         $id_pesanan = $pesanan->id;
 
         Mail::send('mails.notifikasi_admin', compact('id_pesanan'), function ($message) {
-              $message->from('aqiqahlampung@muliajayaindofarm.com','Aqiqah Lampung');
-              $message->to("rikopernandoriko96@gmail.com");
+              $message->from('ibnmp10@gmail.com','Aqiqah Lampung');
+              $message->to("rindangramadhan10@gmail.com");
               $message->subject('Ada Pesanan baru');
         });
+        */
 
     }
 }
